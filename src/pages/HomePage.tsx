@@ -20,9 +20,6 @@ const HomePage: React.FC = () => {
   const carouselRef = useRef<CarouselRef>(null);
   const navigate = useNavigate();
 
-  const navigateToUpcoming = () => {
-    navigate('/upcoming');
-  };
 
   const carouselImages = [
     {
@@ -91,15 +88,6 @@ const HomePage: React.FC = () => {
             We specialize in creating authentic trekking and adventure experiences 
             that connect you with nature and challenge your limits.
           </Paragraph>
-          <Button 
-            type="primary" 
-            size="large" 
-            icon={<ArrowRightOutlined />}
-            className="hero-button"
-            onClick={navigateToUpcoming}
-          >
-            Explore Upcoming Adventures
-          </Button>
         </div>
       </div>
 
