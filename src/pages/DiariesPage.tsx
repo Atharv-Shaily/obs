@@ -1,7 +1,7 @@
 import React from 'react';
-import { Row, Col, Typography, Card, Rate, Avatar, Tag, Space, Button } from 'antd';
-import { UserOutlined, CalendarOutlined, EnvironmentOutlined, ArrowRightOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { Row, Col, Typography, Card, Rate, Avatar, Tag, Space } from 'antd';
+import { UserOutlined, CalendarOutlined, EnvironmentOutlined } from '@ant-design/icons';
+
 import { useDarkMode } from '../contexts/DarkModeContext';
 import '../styles/components/HeroSection.less';
 import '../styles/components/DiariesPage.less';
@@ -16,7 +16,7 @@ const { Title, Paragraph } = Typography;
 
 const DiariesPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
-  const navigate = useNavigate();
+
   const experiences = [
     {
       id: 1,
@@ -140,103 +140,6 @@ const DiariesPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Kuari Pass Coming Soon Section */}
-      <div className="kuari-coming-soon" style={{ 
-        padding: '40px 24px', 
-        maxWidth: '1200px', 
-        margin: '0 auto',
-        textAlign: 'center'
-      }}>
-        <Card 
-          style={{ 
-            background: isDarkMode 
-              ? 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)' 
-              : 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
-            border: isDarkMode ? '2px solid #404040' : '2px solid #1e3a8a',
-            borderRadius: '16px',
-            boxShadow: isDarkMode 
-              ? '0 8px 32px rgba(0,0,0,0.3)' 
-              : '0 8px 32px rgba(30, 58, 138, 0.15)',
-            position: 'relative',
-            overflow: 'hidden'
-          }}
-        >
-          <div style={{
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            width: '12px',
-            height: '12px',
-            borderRadius: '50%',
-            background: '#ff4d4f',
-            animation: 'blink 1.5s infinite',
-            boxShadow: '0 0 10px #ff4d4f'
-          }} />
-          
-          <Space direction="vertical" size="large" style={{ width: '100%' }}>
-            <div>
-              <Title 
-                level={2} 
-                style={{ 
-                  margin: 0,
-                  color: isDarkMode ? '#e5e5e5' : '#1e3a8a',
-                  textShadow: isDarkMode ? '0 2px 4px rgba(0,0,0,0.5)' : '0 2px 4px rgba(0,0,0,0.1)'
-                }}
-              >
-                🏔️ Kuari Pass Trek is Coming Back!
-              </Title>
-              <Paragraph 
-                style={{ 
-                  fontSize: '18px',
-                  margin: '8px 0 0 0',
-                  color: isDarkMode ? '#a3a3a3' : '#dc2626',
-                  fontWeight: '600'
-                }}
-              >
-                December 25-30, 2025 • Winter Wonderland Experience
-              </Paragraph>
-            </div>
-            
-            <Paragraph 
-              style={{ 
-                fontSize: '16px',
-                color: isDarkMode ? '#d4d4d4' : '#374151',
-                maxWidth: '600px',
-                margin: '0 auto',
-                lineHeight: '1.6'
-              }}
-            >
-              After the incredible success of our previous Kuari Pass adventures, we're excited to announce 
-              our upcoming winter trek! Experience the magic of snow-covered trails and breathtaking 
-              Himalayan views.
-            </Paragraph>
-            
-            <Button 
-              type="primary" 
-              size="large"
-              icon={<ArrowRightOutlined />}
-              onClick={() => navigate('/upcoming')}
-              className="hero-button"
-              style={{ 
-                height: '50px',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
-              }}
-            >
-              Get Details & Book Now
-            </Button>
-          </Space>
-        </Card>
-      </div>
 
       {/* Past Experiences */}
       <div className="experiences-section" style={{ 

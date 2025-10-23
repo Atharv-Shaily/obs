@@ -219,6 +219,103 @@
   }
 }
 
+// Quick Booking Section Styles
+.quick-booking-section {
+  .booking-container {
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 300px;
+    padding: 10px 0;
+
+    .booking-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 15px;
+    }
+  }
+
+  .booking-button {
+    height: 70px;
+    font-size: 20px;
+    font-weight: bold;
+    min-width: 300px;
+    background: linear-gradient(135deg, #d4a574 0%, #b8941f 100%);
+    border-color: #d4a574;
+    box-shadow: 0 8px 20px rgba(212, 165, 116, 0.4);
+    border-radius: 12px;
+    border: none;
+    transition: all 0.3s ease;
+    transform: translateY(0);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(212, 165, 116, 0.6);
+    }
+  }
+
+  .chat-button {
+    height: 70px;
+    font-size: 18px;
+    font-weight: bold;
+    min-width: 300px;
+    background: linear-gradient(135deg, #d4a574 0%, #b8941f 100%);
+    border-color: #d4a574;
+    box-shadow: 0 8px 20px rgba(212, 165, 116, 0.4);
+    border-radius: 12px;
+    border: none;
+    transition: all 0.3s ease;
+    transform: translateY(0);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(212, 165, 116, 0.6);
+    }
+  }
+
+  .confirmation-message {
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 2px solid #d4a574;
+
+    &.light-mode {
+      background: linear-gradient(135deg, #f6ffed 0%, #fff7e6 100%);
+    }
+
+    &.dark-mode {
+      background: linear-gradient(135deg, #1a2f1a 0%, #2d1f0a 100%);
+    }
+
+    .confirmation-text {
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 500;
+
+      &.light-mode {
+        color: #333;
+      }
+
+      &.dark-mode {
+        color: #e5e5e5;
+      }
+    }
+  }
+
+  .contact-info {
+    font-size: 16px;
+    margin: 0;
+    line-height: 1.8;
+    text-align: center;
+  }
+}
+
 
 // Mobile responsive adjustments
 @media (max-width: 768px) {

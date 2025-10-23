@@ -12,7 +12,6 @@ import groupPrevious from '../assets/treks/kuari/group-previous.png';
 import kuariTaliLake from '../assets/treks/kuari/Kuari-Pass-Trek-Tali-Lake.webp';
 import kuariScenery from '../assets/treks/kuari/kuari-scenery.avif';
 import kuariPassBrochure from '../assets/treks/kuari/Kuari Pass Trek Brochure (Oh Bhaisahab Experience).pdf';
-import upiQRCode from '../assets/upi.jpg';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -618,117 +617,54 @@ const UpcomingPage: React.FC = () => {
             <Title level={2} style={{ margin: 0, color: '#d4a574' }}>
               Quick Booking 
             </Title>
-            <Alert
-              message="Payment Gateway Integration in Progress"
-              description="We're currently in the process of setting up secure payment gateway. For now, please use the UPI QR Code below to pay the registration fee."
-              type="info"
-              showIcon
-              style={{ 
-                textAlign: 'left',
-                borderRadius: '8px'
-              }}
-            />
-            <Row gutter={[24, 24]} align="top">
-              <Col xs={24} md={12}>
-                <div style={{ 
-                  textAlign: 'center', 
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  minHeight: '300px'
-                }}>
-                  <Title level={4} style={{ marginBottom: '20px', color: '#d4a574' }}>
-                    📱 Scan & Pay
-                  </Title>
-                  <div style={{ 
-                    display: 'flex', 
-                    justifyContent: 'center',
-                    marginBottom: '20px',
-                    flex: 1,
-                    alignItems: 'center'
-                  }}>
-                    <div style={{
-                      width: '200px',
-                      height: '200px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderRadius: '8px',
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                      background: 'white',
-                      padding: '10px'
-                    }}>
-                      <img 
-                        src={upiQRCode} 
-                        alt="UPI QR Code for Payment"
-                        style={{ 
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'contain',
-                          borderRadius: '4px'
-                        }}
-                      />
+            <div className="quick-booking-section">
+              <Row gutter={[24, 24]} align="stretch">
+                <Col xs={24} md={12}>
+                  <div className="booking-container">
+                    <div className="booking-content">
+                      <Button 
+                        type="primary" 
+                        size="large"
+                        href="https://u.payu.in/PAYUMN/5rIiDpvjZirh"
+                        target="_blank"
+                        className="booking-button"
+                      >
+                        🎯 Book Your Slot Now
+                      </Button>
+                      
+                      <div className={`confirmation-message ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+                        <Text className={`confirmation-text ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+                          📧 After successful payment, you'll receive a confirmation email from Team OBS with the WhatsApp group link. Please join the group to stay updated!
+                        </Text>
+                      </div>
                     </div>
                   </div>
-                  {/* Desktop UPI ID */}
-                  <div className="desktop-upi">
-                    <Text code className="upi-id-text">
-                      UPI ID: gairolayatharth@okaxis
-                    </Text>
-                  </div>
-                  
-                  {/* Mobile Book Slot Button */}
-                  <div className="mobile-book-slot">
-                    <a 
-                      href="upi://pay?pa=gairolayatharth@okaxis&pn=gairolayatharth&am=2999&cu=INR"
-                      className={`book-slot-button ${isDarkMode ? 'dark-mode' : 'light-mode'}`}
-                    >
-                      📱 Click to Book Slot!
-                    </a>
-                  </div>
-                </div>
-              </Col>
-              <Col xs={24} md={12}>
-                <div style={{ 
-                  textAlign: 'center', 
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  minHeight: '300px'
-                }}>
-                  <Title level={4} style={{ marginBottom: '20px', color: '#d4a574' }}>
-                    📞 Contact Us
-                  </Title>
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Paragraph style={{ fontSize: '16px', margin: '0 0 24px 0', lineHeight: '1.8' }}>
-                      <Text strong>Reach out to us for any queries:</Text><br />
-                      <br />
-                      📞 WhatsApp: <Text code>+91 79834 14419</Text><br />
-                      📧 Email: <Text code>obsyatharth@gmail.com</Text>
-                    </Paragraph>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                </Col>
+                <Col xs={24} md={12}>
+                  <div className="booking-container">
+                    <div className="booking-content">
                       <Button 
                         type="primary" 
                         size="large"
                         icon={<WhatsAppIcon />}
                         href="https://wa.me/917983414419"
                         target="_blank"
-                        style={{ 
-                          height: '50px',
-                          fontSize: '16px',
-                          fontWeight: 'bold',
-                          minWidth: '200px'
-                        }}
+                        className="chat-button"
                       >
-                        Chat With Us!
+                        💬 Chat With Us!
                       </Button>
+                      
+                      <Paragraph className="contact-info">
+                        <Text strong>Reach out to us for any queries:</Text><br />
+                        <br />
+                        📞 WhatsApp: <Text code>+91 79834 14419</Text><br />
+                        📧 Email: <Text code>obsyatharth@gmail.com</Text>
+                      </Paragraph>
                     </div>
                   </div>
-                </div>
-              </Col>
-            </Row>
+                </Col>
+              </Row>
+            </div>
           </Space>
         </Card>
       </div>

@@ -26,14 +26,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       label: 'Home',
     },
     {
-      key: '/diaries',
-      icon: <BookOutlined />,
-      label: 'Previous OBS Diaries',
-    },
-    {
       key: '/upcoming',
       icon: <CalendarOutlined />,
       label: 'Upcoming Experiences',
+    },
+    {
+      key: '/diaries',
+      icon: <BookOutlined />,
+      label: 'Previous OBS Diaries',
     },
     {
       key: '/about',
