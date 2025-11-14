@@ -1,0 +1,234 @@
+@import '../globals/index.less';
+
+// Variables
+@primary-color: #d4a574;
+@success-color: #52c41a;
+@dark-bg: #1a1a1a;
+@light-bg: white;
+@dark-section-bg: #262626;
+@light-section-bg: #f8f9fa;
+
+// Booking Modal Styles
+.booking-modal {
+  .ant-modal-content {
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  &.light-mode {
+    .ant-modal-content {
+      background: @light-bg;
+    }
+  }
+
+  &.dark-mode {
+    .ant-modal-content {
+      background: @dark-bg;
+    }
+  }
+
+  .booking-modal-content {
+    padding: 8px;
+  }
+
+  .modal-header {
+    text-align: center;
+    padding: 16px 0;
+
+    .header-icon {
+      font-size: 48px;
+      color: @primary-color;
+      margin-bottom: 12px;
+    }
+
+    h3 {
+      color: @primary-color;
+    }
+  }
+
+  .form-section {
+    margin-bottom: 8px;
+
+    .section-label {
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  .custom-radio-group {
+    width: 100%;
+
+    .custom-radio {
+      width: 100%;
+      padding: 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      margin: 0;
+      display: flex;
+      align-items: flex-start;
+
+      &.ant-radio-wrapper-checked {
+        background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(212, 165, 116, 0.05) 100%);
+        border: 2px solid @primary-color;
+      }
+
+      .radio-content {
+        margin-left: 8px;
+        flex: 1;
+      }
+    }
+  }
+
+  &.light-mode {
+    .custom-radio {
+      background: @light-section-bg;
+      border: 1px solid #e8e8e8;
+
+      &:hover {
+        border-color: @primary-color;
+        box-shadow: 0 2px 8px rgba(212, 165, 116, 0.15);
+      }
+    }
+  }
+
+  &.dark-mode {
+    .custom-radio {
+      background: @dark-section-bg;
+      border: 1px solid #404040;
+
+      &:hover {
+        border-color: @primary-color;
+        box-shadow: 0 2px 8px rgba(212, 165, 116, 0.25);
+      }
+    }
+  }
+
+  .amount-summary-card {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+
+    &.light-mode {
+      background: linear-gradient(135deg, #f6ffed 0%, #fff7e6 100%);
+      border: 2px solid @success-color;
+    }
+
+    &.dark-mode {
+      background: linear-gradient(135deg, #1a2f1a 0%, #2d1f0a 100%);
+      border: 2px solid @success-color;
+    }
+
+    .amount-breakdown {
+      padding: 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+
+      &.light-mode {
+        background: white;
+      }
+
+      &.dark-mode {
+        background: @dark-bg;
+      }
+    }
+  }
+
+  .modal-footer-info {
+    margin-top: 8px;
+  }
+
+  // Responsive styles
+  @media (max-width: 768px) {
+    .ant-modal {
+      max-width: calc(100vw - 32px);
+      margin: 16px auto;
+    }
+
+    .modal-header {
+      padding: 12px 0;
+
+      .header-icon {
+        font-size: 40px;
+      }
+
+      h3 {
+        font-size: 20px;
+      }
+    }
+
+    .custom-radio {
+      padding: 12px;
+
+      .radio-content {
+        font-size: 14px;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ant-modal {
+      max-width: calc(100vw - 16px);
+      margin: 8px auto;
+    }
+
+    .booking-modal-content {
+      padding: 4px;
+    }
+
+    .modal-header {
+      padding: 8px 0;
+
+      .header-icon {
+        font-size: 36px;
+      }
+
+      h3 {
+        font-size: 18px;
+      }
+    }
+
+    .custom-radio {
+      padding: 10px;
+    }
+
+    .amount-summary-card {
+      .ant-card-body {
+        padding: 16px;
+      }
+
+      h2 {
+        font-size: 24px;
+      }
+    }
+  }
+}
+
+// Radio button customization
+.booking-modal .custom-radio-group {
+  .ant-radio {
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+
+  .ant-radio-inner {
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+  }
+
+  .ant-radio-checked .ant-radio-inner {
+    border-color: @primary-color;
+    background-color: @primary-color;
+  }
+
+  .ant-radio-checked::after {
+    border-color: @primary-color;
+  }
+
+  .ant-radio:hover .ant-radio-inner {
+    border-color: @primary-color;
+  }
+}
+

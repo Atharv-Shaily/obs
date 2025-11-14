@@ -4,15 +4,12 @@ import type { CarouselRef } from 'antd/es/carousel';
 import { CalendarOutlined, EnvironmentOutlined, ClockCircleOutlined, WalletOutlined, DownloadOutlined, CreditCardOutlined, LeftOutlined, RightOutlined, ThunderboltOutlined } from '@ant-design/icons';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import UpcomingDrawer from '../components/UpcomingDrawer';
+import BookingModal from '../components/BookingModal';
+import { kuariPassData } from '../assets/treks/kuari/KuariPassData'
 import '../styles/components/HeroSection.less';
 import '../styles/components/UpcomingPage.less';
 import '../styles/components/CarouselCustom.less';
 import grasslandMountain from '../assets/treks/yulla/grassland-mountain.jpg';
-import kuariRanges from '../assets/treks/kuari/kuari-ranges.png';
-import groupPrevious from '../assets/treks/kuari/group-previous.png';
-import kuariTaliLake from '../assets/treks/kuari/Kuari-Pass-Trek-Tali-Lake.webp';
-import kuariScenery from '../assets/treks/kuari/kuari-scenery.avif';
-import kuariPassBrochure from '../assets/treks/kuari/Kuari Pass Trek Brochure (Oh Bhaisahab Experience).pdf';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -21,6 +18,7 @@ const UpcomingPage: React.FC = () => {
   const paymentMessageRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<CarouselRef>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [bookingModalOpen, setBookingModalOpen] = useState(false);
 
   // WhatsApp Icon Component
   const WhatsAppIcon = () => (
@@ -44,121 +42,11 @@ const UpcomingPage: React.FC = () => {
 
   const handleDownloadBrochure = () => {
     const link = document.createElement('a');
-    link.href = kuariPassBrochure;
+    link.href = kuariPassData.brochure;
     link.download = 'Kuari Pass Trek Brochure - Oh Bhaisahab Experience.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
-  const kuariPassDetails = {
-    title: 'Kuari Pass Trek - Winter Wonderland',
-    date: 'December 25-30, 2025',
-    duration: '6 Days / 5 Nights',
-    difficulty: 'Moderate',
-    price: '₹12,999 (with transport), ₹10,499 (without transport)',
-    location: 'Garhwal Himalayas, Uttarakhand',
-    images: [
-      kuariRanges,
-      kuariTaliLake,
-      kuariScenery,
-      groupPrevious,
-      // Add more images here as you download them
-    ],
-    description: 'Experience the magic of winter in the Garhwal Himalayas with our signature Kuari Pass trek. This easy-moderate level trek offers breathtaking views of snow-capped peaks including Nanda Devi, Trishul, and Dronagiri.',
-    highlights: [
-      'Breathtaking views of Nanda Devi (7,816m) and other Himalayan peaks',
-      'Walk through pristine snow-covered trails',
-      'Stay in traditional mountain villages',
-      'Witness stunning sunrises and sunsets',
-      'Experience local Garhwali culture',
-      'Professional mountain guides and safety equipment',
-      'Signature OBS Experiences including Happiness Sharing, Meditation & Journaling',
-      'Welcome & Farewell Gifts, Gifts for Winners'
-    ],
-    itinerary: [
-      {
-        day: 'Day 1',
-        title: 'Dehradun to Joshimath',
-        description: 'Drive from Dehradun to Joshimath (280km, 8-9hr drive)',
-        type: 'Travel'
-      },
-      {
-        day: 'Day 2',
-        title: 'Joshimath to Gulling',
-        description: 'Drive from Joshimath to Tugasi (16km), then trek from Tugasi to Gulling (3km)',
-        type: 'Travel + Trek'
-      },
-      {
-        day: 'Day 3',
-        title: 'Gulling to Khullara',
-        description: 'Trek from Gulling to Khullara Campsite (3km)',
-        type: 'Trek'
-      },
-      {
-        day: 'Day 4',
-        title: 'Khullara to Kuari Pass & back',
-        description: 'Summit Day - Trek to Kuari Pass and return (10km round trek)',
-        type: 'Trek'
-      },
-      {
-        day: 'Day 5',
-        title: 'Khullara to Joshimath',
-        description: 'Trek from Khullara to Tugasi (6km), then drive from Tugasi to Joshimath (16km)',
-        type: 'Travel + Trek'
-      },
-      {
-        day: 'Day 6',
-        title: 'Joshimath to Dehradun',
-        description: 'Drive from Joshimath to Dehradun (280km, 8-9hr drive)',
-        type: 'Travel'
-      }
-    ],
-    inclusions: [
-      'Stay for 5 Nights',
-      'Entry/Permit Fees',
-      'Local Guide Fee',
-      'All meals from dinner on Day 1 to breakfast on Day 6',
-      'Transportation from Dehradun to Dehradun (if you opt for this)',
-      'Signature OBS (Oh-Bhaisahab) Experiences',
-      'Welcome & Farewell Gifts, Gifts for Winners',
-      'Memories for a lifetime ;)'
-    ],
-    exclusions: [
-      'Backpack Offloading (if you opt for this)',
-      'Any costs arising due to unforeseen circumstances like landslides, road blocks, etc.',
-      'Anything not mentioned under Trip Inclusions',
-      'Any kind of personal expenses like tips, laundry, etc.'
-    ],
-    pricing: {
-      trekFee: '₹10,499',
-      transportationFee: '₹2,500',
-      totalCost: '₹12,999',
-      registrationFee: '₹2,999',
-      remainingAmount: '₹10,000',
-      paymentDeadline: '25 November'
-    },
-    cancellationPolicy: [
-      {
-        period: 'Before 25 November',
-        fee: '₹2,999',
-        refund: 'Remaining amount'
-      },
-      {
-        period: '26 November - 14 December',
-        fee: '30% of total fee',
-        refund: '70%'
-      },
-      {
-        period: '15 December - 22 December',
-        fee: '50% of total fee',
-        refund: '50%'
-      },
-      {
-        period: 'On or after 23 December',
-        fee: '100%',
-        refund: 'Non-refundable'
-      }
-    ]
   };
 
   return (
@@ -204,11 +92,11 @@ const UpcomingPage: React.FC = () => {
                   effect="fade"
                   style={{ borderRadius: '8px', overflow: 'hidden' }}
                 >
-                  {kuariPassDetails.images.map((image, index) => (
+                  {kuariPassData.images.map((image, index) => (
                     <div key={index}>
                       <img 
                         src={image} 
-                        alt={`${kuariPassDetails.title} - Image ${index + 1}`}
+                        alt={`${kuariPassData.title} - Image ${index + 1}`}
                         className="carousel-image"
                       />
                     </div>
@@ -237,14 +125,14 @@ const UpcomingPage: React.FC = () => {
               <Space direction="vertical" size="large" style={{ width: '100%' }}>
                 <div>
                   <Title level={2} style={{ marginBottom: '8px' }}>
-                    {kuariPassDetails.title}
+                    {kuariPassData.title}
                   </Title>
                   <Space wrap>
                     <Tag color="blue" icon={<CalendarOutlined />}>
-                      {kuariPassDetails.date}
+                      {kuariPassData.date}
                     </Tag>
                     <Tag color="green" icon={<ClockCircleOutlined />}>
-                      {kuariPassDetails.duration}
+                      {kuariPassData.duration}
                     </Tag>
                   </Space>
                 </div>
@@ -252,12 +140,12 @@ const UpcomingPage: React.FC = () => {
                 <div>
                   <Space>
                     <EnvironmentOutlined style={{ color: '#d4a574' }} />
-                    <Text strong>{kuariPassDetails.location}</Text>
+                    <Text strong>{kuariPassData.location}</Text>
                   </Space>
                 </div>
 
                 <Paragraph style={{ fontSize: '16px', lineHeight: '1.6' }}>
-                  {kuariPassDetails.description}
+                  {kuariPassData.description}
                 </Paragraph>
 
                 <div className={`pricing-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -268,14 +156,14 @@ const UpcomingPage: React.FC = () => {
                   <Row gutter={[16, 16]} className="pricing-cards">
                     <Col xs={24} sm={12}>
                       <div className={`pricing-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-                        <Text strong className="price-amount with-transport">₹12,999</Text>
+                        <Text strong className="price-amount with-transport">₹{kuariPassData.pricing.totalCostWithTransport.toLocaleString('en-IN')}</Text>
                         <br />
                         <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>With Transport</Text>
                       </div>
                     </Col>
                     <Col xs={24} sm={12}>
                       <div className={`pricing-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-                        <Text strong className="price-amount without-transport">₹10,499</Text>
+                        <Text strong className="price-amount without-transport">₹{kuariPassData.pricing.totalCostWithoutTransport.toLocaleString('en-IN')}</Text>
                         <br />
                         <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>Without Transport</Text>
                       </div>
@@ -289,7 +177,7 @@ const UpcomingPage: React.FC = () => {
                   description={
                     <div>
                       <Text strong style={{ fontSize: '16px', color: '#d4a574' }}>
-                        Pay just ₹2,999 now and rest before 25th November !!
+                        Pay just ₹{kuariPassData.pricing.registrationFee.toLocaleString('en-IN')} now and rest before {kuariPassData.pricing.paymentDeadline} !!
                       </Text>
                       <br />
                       <Text style={{ fontSize: '14px', color: isDarkMode ? '#a3a3a3' : '#666' }}>
@@ -382,7 +270,7 @@ const UpcomingPage: React.FC = () => {
             {/* Highlights List */}
             <Col xs={24} lg={12}>
               <Row gutter={[16, 16]}>
-                {kuariPassDetails.highlights.map((highlight, index) => (
+                {kuariPassData.highlights.map((highlight, index) => (
                   <Col xs={24} sm={12} key={index}>
                     <Space>
                       <Text style={{ color: '#52c41a' }}>✓</Text>
@@ -398,7 +286,7 @@ const UpcomingPage: React.FC = () => {
         {/* Itinerary */}
         <Card title="Detailed Itinerary" style={{ marginBottom: '40px', borderRadius: '12px' }}>
           <Row gutter={[24, 16]}>
-            {kuariPassDetails.itinerary.map((day, index) => (
+            {kuariPassData.itinerary.map((day, index) => (
               <Col xs={24} key={index}>
                 <Card 
                   size="small" 
@@ -448,7 +336,7 @@ const UpcomingPage: React.FC = () => {
               headStyle={{ background: '#f6ffed', color: '#52c41a' }}
             >
               <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                {kuariPassDetails.inclusions.map((item, index) => (
+                {kuariPassData.inclusions.map((item, index) => (
                   <Space key={index}>
                     <Text style={{ color: '#52c41a' }}>✓</Text>
                     <Text>{item}</Text>
@@ -464,7 +352,7 @@ const UpcomingPage: React.FC = () => {
               headStyle={{ background: '#fff2f0', color: '#ff4d4f' }}
             >
               <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                {kuariPassDetails.exclusions.map((item, index) => (
+                {kuariPassData.exclusions.map((item, index) => (
                   <Space key={index}>
                     <Text style={{ color: '#ff4d4f' }}>✗</Text>
                     <Text>{item}</Text>
@@ -498,17 +386,17 @@ const UpcomingPage: React.FC = () => {
                 <Space direction="vertical" size="small" style={{ width: '100%' }}>
                   <Row justify="space-between">
                     <Text>Trek Fee:</Text>
-                    <Text strong>{kuariPassDetails.pricing.trekFee}</Text>
+                    <Text strong>₹{kuariPassData.pricing.trekFee.toLocaleString('en-IN')}</Text>
                   </Row>
                   <Row justify="space-between">
                     <Text>Transportation Fee:</Text>
-                    <Text strong>{kuariPassDetails.pricing.transportationFee}</Text>
+                    <Text strong>₹{kuariPassData.pricing.transportationFee.toLocaleString('en-IN')}</Text>
                   </Row>
                   <hr style={{ margin: '12px 0', border: '1px solid #e8e8e8' }} />
                   <Row justify="space-between">
                     <Text strong style={{ fontSize: '16px' }}>Total Cost:</Text>
                     <Text strong style={{ fontSize: '18px', color: '#52c41a' }}>
-                      {kuariPassDetails.pricing.totalCost}
+                      ₹{kuariPassData.pricing.totalCostWithTransport.toLocaleString('en-IN')}
                     </Text>
                   </Row>
                 </Space>
@@ -528,17 +416,17 @@ const UpcomingPage: React.FC = () => {
                   <Row justify="space-between">
                     <Text>Registration Fee (Now):</Text>
                     <Text strong style={{ color: '#ff4d4f' }}>
-                      {kuariPassDetails.pricing.registrationFee}
+                      ₹{kuariPassData.pricing.registrationFee.toLocaleString('en-IN')}
                     </Text>
                   </Row>
                   <Row justify="space-between">
                     <Text>Remaining Amount:</Text>
-                    <Text strong>{kuariPassDetails.pricing.remainingAmount}</Text>
+                    <Text strong>₹{kuariPassData.pricing.remainingAmountWithTransport.toLocaleString('en-IN')}</Text>
                   </Row>
                   <Row justify="space-between">
                     <Text>Payment Deadline:</Text>
                     <Text strong style={{ color: '#1890ff' }}>
-                      {kuariPassDetails.pricing.paymentDeadline}
+                      {kuariPassData.pricing.paymentDeadline}
                     </Text>
                   </Row>
                 </Space>
@@ -568,7 +456,7 @@ const UpcomingPage: React.FC = () => {
           }}
         >
           <Row gutter={[16, 16]}>
-            {kuariPassDetails.cancellationPolicy.map((policy, index) => (
+            {kuariPassData.cancellationPolicy.map((policy, index) => (
               <Col xs={24} sm={12} lg={6} key={index}>
                 <Card 
                   size="small"
@@ -627,8 +515,7 @@ const UpcomingPage: React.FC = () => {
                       <Button 
                         type="primary" 
                         size="large"
-                        href="https://u.payu.in/PAYUMN/5rIiDpvjZirh"
-                        target="_blank"
+                        onClick={() => setBookingModalOpen(true)}
                         className="booking-button"
                       >
                         🎯 Book Your Slot Now
@@ -670,6 +557,16 @@ const UpcomingPage: React.FC = () => {
           </Space>
         </Card>
       </div>
+
+      {/* Booking Modal */}
+      <BookingModal 
+        open={bookingModalOpen} 
+        onClose={() => setBookingModalOpen(false)}
+        trekTitle={kuariPassData.title}
+        pricing={kuariPassData.pricing}
+        paymentLinks={kuariPassData.paymentLinks}
+        transportationRoute="Dehradun to Dehradun"
+      />
 
       {/* Upcoming Adventures Drawer */}
       <UpcomingDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
