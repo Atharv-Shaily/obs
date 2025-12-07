@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Radio, Space, Typography, Button, Divider, Card, Row, Col, Alert } from 'antd';
 import { CheckCircleOutlined, WalletOutlined, CreditCardOutlined } from '@ant-design/icons';
 import { useDarkMode } from '../contexts/DarkModeContext';
-import type { PricingDetails, PaymentLinks } from '../assets/treks/kuari/KuariPassData';
+import type { PricingDetails, PaymentLinks } from '../assets/treks/TrekData';
 import '../styles/components/BookingModal.less';
 
 const { Title, Text, Paragraph } = Typography;

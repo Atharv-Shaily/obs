@@ -1,24 +1,39 @@
 import React, { useRef, useState } from 'react';
-import { Row, Col, Typography, Card, Button, Space, Tag, Alert, Carousel, FloatButton } from 'antd';
+import { Row, Col, Typography, Card, Button, Space, Tag, Alert, Carousel, FloatButton, Tabs } from 'antd';
 import type { CarouselRef } from 'antd/es/carousel';
 import { CalendarOutlined, EnvironmentOutlined, ClockCircleOutlined, WalletOutlined, DownloadOutlined, CreditCardOutlined, LeftOutlined, RightOutlined, ThunderboltOutlined } from '@ant-design/icons';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import UpcomingDrawer from '../components/UpcomingDrawer';
 import BookingModal from '../components/BookingModal';
-import { kuariPassData } from '../assets/treks/kuari/KuariPassData'
+import { kuariPassData } from '../assets/treks/kuari/KuariPassData';
+import { brahmatalData } from '../assets/treks/bhramtal/BrahmatalData';
+import { kedarkanthaData } from '../assets/treks/kedarkantha/KedarkanthaData';
+import { sandakphuData } from '../assets/treks/sandakhpu/SandakphuData';
+import type { TrekData } from '../assets/treks/TrekData';
 import '../styles/components/HeroSection.less';
 import '../styles/components/UpcomingPage.less';
 import '../styles/components/CarouselCustom.less';
+import '../styles/components/TrekTabs.less';
 import grasslandMountain from '../assets/treks/yulla/grassland-mountain.jpg';
 
 const { Title, Paragraph, Text } = Typography;
+
+// All available treks
+const allTreks: TrekData[] = [
+  kuariPassData,
+  kedarkanthaData,
+  sandakphuData,
+  brahmatalData
+];
 
 const UpcomingPage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
   const paymentMessageRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<CarouselRef>(null);
+  const trekContentRef = useRef<HTMLDivElement>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
+  const [selectedTrek, setSelectedTrek] = useState<TrekData>(allTreks[0]);
 
   // WhatsApp Icon Component
   const WhatsAppIcon = () => (
@@ -34,27 +49,63 @@ const UpcomingPage: React.FC = () => {
   );
 
   const handleBookNow = () => {
-    paymentMessageRef.current?.scrollIntoView({ 
-      behavior: 'smooth',
-      block: 'start'
-    });
+    // Only Kuari Pass uses the modal, scroll to booking section for it
+    if (selectedTrek.id === 'kuari-pass') {
+      paymentMessageRef.current?.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    } else if (selectedTrek.registrationLink) {
+      // Other treks with registration link - open it
+      window.open(selectedTrek.registrationLink, '_blank');
+    }
+    // If no registration link yet for other treks, do nothing
   };
 
   const handleDownloadBrochure = () => {
     const link = document.createElement('a');
-    link.href = kuariPassData.brochure;
-    link.download = 'Kuari Pass Trek Brochure - Oh Bhaisahab Experience.pdf';
+    link.href = selectedTrek.brochure;
+    link.download = `${selectedTrek.title}.pdf`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
+  const handleTrekChange = (key: string) => {
+    const trek = allTreks.find(t => t.id === key);
+    if (trek) {
+      setSelectedTrek(trek);
+      // Reset carousel when changing treks
+      carouselRef.current?.goTo(0);
+      
+      // Scroll to trek content only if user is below it
+      // This prevents jarring scroll behavior when tabs are already in view
+      if (trekContentRef.current) {
+        const rect = trekContentRef.current.getBoundingClientRect();
+        if (rect.top < 0) {
+          // User has scrolled past the content, scroll back to it
+          trekContentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        // Otherwise, do nothing - user can already see the tabs
+      }
+    }
+  };
+
+  // Create tabs items for Ant Design Tabs
+  const tabItems = allTreks.map(trek => ({
+    key: trek.id,
+    label: (
+      <span style={{ 
+        fontSize: '14px', 
+        fontWeight: selectedTrek.id === trek.id ? 600 : 400 
+      }}>
+        {trek.title.split(' - ')[0]}
+      </span>
+    ),
+  }));
+
   return (
-    <div style={{ 
-      background: isDarkMode ? '#0f0f0f' : '#f5f5f5', 
-      minHeight: '100vh',
-      transition: 'background-color 0.3s ease'
-    }}>
+    <div className={`upcoming-page-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <div 
         className="hero-section" 
         style={{ backgroundImage: `url(${grasslandMountain})` }}
@@ -70,16 +121,38 @@ const UpcomingPage: React.FC = () => {
         </div>
       </div>
 
-      <div style={{ padding: '80px 24px', maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Main Experience Card */}
+      <div ref={trekContentRef} className="trek-content-container">
+        {/* Trek Navigation Tabs */}
         <Card 
-          style={{ 
-            marginBottom: '40px',
-            borderRadius: '16px',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
-            overflow: 'hidden'
-          }}
+          className={`trek-tabs-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}
+          bodyStyle={{ padding: '0' }}
         >
+          <Tabs
+            activeKey={selectedTrek.id}
+            onChange={handleTrekChange}
+            centered
+            size="large"
+            items={tabItems}
+            style={{ 
+              padding: '0 16px',
+            }}
+            tabBarStyle={{
+              marginBottom: 0,
+              borderBottom: `1px solid ${isDarkMode ? '#404040' : '#f0f0f0'}`
+            }}
+          />
+        </Card>
+
+        {/* Main Experience Card */}
+          <Card 
+            className="trek-main-card"
+            style={{ 
+              marginBottom: '40px',
+              borderRadius: '16px',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
+              overflow: 'hidden'
+            }}
+          >
           <Row gutter={[32, 32]} align="top">
             <Col xs={24} lg={12}>
               <div className="trek-carousel" style={{ paddingTop: '8px', position: 'relative' }}>
@@ -92,11 +165,11 @@ const UpcomingPage: React.FC = () => {
                   effect="fade"
                   style={{ borderRadius: '8px', overflow: 'hidden' }}
                 >
-                  {kuariPassData.images.map((image, index) => (
+                  {selectedTrek.images.map((image, index) => (
                     <div key={index}>
                       <img 
                         src={image} 
-                        alt={`${kuariPassData.title} - Image ${index + 1}`}
+                        alt={`${selectedTrek.title} - Image ${index + 1}`}
                         className="carousel-image"
                       />
                     </div>
@@ -125,14 +198,14 @@ const UpcomingPage: React.FC = () => {
               <Space direction="vertical" size="large" style={{ width: '100%' }}>
                 <div>
                   <Title level={2} style={{ marginBottom: '8px' }}>
-                    {kuariPassData.title}
+                    {selectedTrek.title}
                   </Title>
                   <Space wrap>
                     <Tag color="blue" icon={<CalendarOutlined />}>
-                      {kuariPassData.date}
+                      {selectedTrek.date}
                     </Tag>
                     <Tag color="green" icon={<ClockCircleOutlined />}>
-                      {kuariPassData.duration}
+                      {selectedTrek.duration}
                     </Tag>
                   </Space>
                 </div>
@@ -140,36 +213,67 @@ const UpcomingPage: React.FC = () => {
                 <div>
                   <Space>
                     <EnvironmentOutlined style={{ color: '#d4a574' }} />
-                    <Text strong>{kuariPassData.location}</Text>
+                    <Text strong>{selectedTrek.location}</Text>
                   </Space>
                 </div>
 
                 <Paragraph style={{ fontSize: '16px', lineHeight: '1.6' }}>
-                  {kuariPassData.description}
+                  {selectedTrek.description}
                 </Paragraph>
 
-                <div className={`pricing-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-                  <div className="pricing-header">
-                    <WalletOutlined className="wallet-icon" />
-                    <Text strong className="pricing-title">Pricing Options:</Text>
+{(selectedTrek.pricing.totalCostWithTransport > 0 || selectedTrek.pricing.totalCostWithoutTransport > 0) && (
+                  <div className={`pricing-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+                    <div className="pricing-header">
+                      <WalletOutlined className="wallet-icon" />
+                      <Text strong className="pricing-title">
+                        {selectedTrek.pricing.totalCostWithTransport > 0 && selectedTrek.pricing.totalCostWithoutTransport > 0 
+                          ? 'Pricing Options:' 
+                          : 'Pricing:'}
+                      </Text>
+                    </div>
+                    <Row gutter={[16, 16]} className="pricing-cards">
+                      {selectedTrek.pricing.totalCostWithTransport > 0 && (
+                        <Col xs={24} sm={selectedTrek.pricing.totalCostWithoutTransport > 0 ? 12 : 24}>
+                          <div className={`pricing-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+                            <Text strong className="price-amount with-transport">₹{selectedTrek.pricing.totalCostWithTransport.toLocaleString('en-IN')}</Text>
+                            <br />
+                            <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>With Transport</Text>
+                          </div>
+                        </Col>
+                      )}
+                      {selectedTrek.pricing.totalCostWithoutTransport > 0 && (
+                        <Col xs={24} sm={selectedTrek.pricing.totalCostWithTransport > 0 ? 12 : 24}>
+                          <div className={`pricing-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+                            <Text strong className="price-amount without-transport">₹{selectedTrek.pricing.totalCostWithoutTransport.toLocaleString('en-IN')}</Text>
+                            <br />
+                            <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+                              {selectedTrek.pricing.totalCostWithTransport > 0 ? 'Without Transport' : 'Trek Package'}
+                            </Text>
+                          </div>
+                        </Col>
+                      )}
+                    </Row>
                   </div>
-                  <Row gutter={[16, 16]} className="pricing-cards">
-                    <Col xs={24} sm={12}>
-                      <div className={`pricing-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-                        <Text strong className="price-amount with-transport">₹{kuariPassData.pricing.totalCostWithTransport.toLocaleString('en-IN')}</Text>
-                        <br />
-                        <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>With Transport</Text>
-                      </div>
-                    </Col>
-                    <Col xs={24} sm={12}>
-                      <div className={`pricing-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-                        <Text strong className="price-amount without-transport">₹{kuariPassData.pricing.totalCostWithoutTransport.toLocaleString('en-IN')}</Text>
-                        <br />
-                        <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>Without Transport</Text>
-                      </div>
-                    </Col>
-                  </Row>
-                </div>
+                )}
+
+                {/* Transportation Note for treks without transport */}
+                {selectedTrek.pricing.totalCostWithTransport === 0 && selectedTrek.pricing.totalCostWithoutTransport > 0 && (
+                  <Alert
+                    message="Transportation Information"
+                    description={
+                      <Text style={{ fontSize: '14px' }}>
+                        {selectedTrek.transportationRoute}
+                      </Text>
+                    }
+                    type="info"
+                    showIcon
+                    style={{ 
+                      borderRadius: '8px',
+                      border: '1px solid #91d5ff',
+                      background: isDarkMode ? '#111d2c' : '#e6f7ff'
+                    }}
+                  />
+                )}
 
                 {/* Payment Plan Highlight */}
                 <Alert
@@ -177,7 +281,7 @@ const UpcomingPage: React.FC = () => {
                   description={
                     <div>
                       <Text strong style={{ fontSize: '16px', color: '#d4a574' }}>
-                        Pay just ₹{kuariPassData.pricing.registrationFee.toLocaleString('en-IN')} now and rest before {kuariPassData.pricing.paymentDeadline} !!
+                        Pay just ₹{selectedTrek.pricing.registrationFee.toLocaleString('en-IN')} now and rest before {selectedTrek.pricing.paymentDeadline} !!
                       </Text>
                       <br />
                       <Text style={{ fontSize: '14px', color: isDarkMode ? '#a3a3a3' : '#666' }}>
@@ -240,38 +344,40 @@ const UpcomingPage: React.FC = () => {
         {/* Highlights */}
         <Card title="Trek Highlights" style={{ marginBottom: '40px', borderRadius: '12px' }}>
           <Row gutter={[32, 32]}>
-            {/* Video Section */}
-            <Col xs={24} lg={12}>
-              <div style={{ 
-                position: 'relative',
-                paddingTop: '56.25%', /* 16:9 Aspect Ratio */
-                width: '100%',
-                marginBottom: '16px'
-              }}>
-                <iframe
-                  src="https://www.youtube.com/embed/9czKeIJJGjQ"
-                  title="Kuari Pass Trek Highlights"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '12px',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
-                  }}
-                />
-              </div>
-            </Col>
+            {/* Video Section - Only show if videoUrl exists */}
+            {selectedTrek.videoUrl && (
+              <Col xs={24} lg={12}>
+                <div style={{ 
+                  position: 'relative',
+                  paddingTop: '56.25%', /* 16:9 Aspect Ratio */
+                  width: '100%',
+                  marginBottom: '16px'
+                }}>
+                  <iframe
+                    src={selectedTrek.videoUrl}
+                    title={`${selectedTrek.title} Highlights`}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: '12px',
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
+                    }}
+                  />
+                </div>
+              </Col>
+            )}
             
             {/* Highlights List */}
-            <Col xs={24} lg={12}>
+            <Col xs={24} lg={selectedTrek.videoUrl ? 12 : 24}>
               <Row gutter={[16, 16]}>
-                {kuariPassData.highlights.map((highlight, index) => (
-                  <Col xs={24} sm={12} key={index}>
+                {selectedTrek.highlights.map((highlight, index) => (
+                  <Col xs={24} sm={selectedTrek.videoUrl ? 24 : 12} key={index}>
                     <Space>
                       <Text style={{ color: '#52c41a' }}>✓</Text>
                       <Text>{highlight}</Text>
@@ -286,7 +392,7 @@ const UpcomingPage: React.FC = () => {
         {/* Itinerary */}
         <Card title="Detailed Itinerary" style={{ marginBottom: '40px', borderRadius: '12px' }}>
           <Row gutter={[24, 16]}>
-            {kuariPassData.itinerary.map((day, index) => (
+            {selectedTrek.itinerary.map((day, index) => (
               <Col xs={24} key={index}>
                 <Card 
                   size="small" 
@@ -336,7 +442,7 @@ const UpcomingPage: React.FC = () => {
               headStyle={{ background: '#f6ffed', color: '#52c41a' }}
             >
               <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                {kuariPassData.inclusions.map((item, index) => (
+                {selectedTrek.inclusions.map((item, index) => (
                   <Space key={index}>
                     <Text style={{ color: '#52c41a' }}>✓</Text>
                     <Text>{item}</Text>
@@ -352,7 +458,7 @@ const UpcomingPage: React.FC = () => {
               headStyle={{ background: '#fff2f0', color: '#ff4d4f' }}
             >
               <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                {kuariPassData.exclusions.map((item, index) => (
+                {selectedTrek.exclusions.map((item, index) => (
                   <Space key={index}>
                     <Text style={{ color: '#ff4d4f' }}>✗</Text>
                     <Text>{item}</Text>
@@ -363,125 +469,150 @@ const UpcomingPage: React.FC = () => {
           </Col>
         </Row>
 
-        {/* Pricing Breakdown */}
-        <Card 
-          title="Package Pricing" 
-          style={{ 
-            marginTop: '40px', 
-            borderRadius: '12px',
-            background: isDarkMode ? '#1a1a1a' : '#f8f9fa'
-          }}
-        >
-          <Row gutter={[24, 24]}>
-            <Col xs={24} md={12}>
-              <div style={{ 
-                background: isDarkMode ? '#262626' : 'white', 
-                padding: '20px', 
-                borderRadius: '8px',
-                border: '1px solid #e8e8e8'
-              }}>
-                <Title level={4} style={{ color: '#d4a574', marginBottom: '16px' }}>
-                  Cost Breakdown
-                </Title>
-                <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                  <Row justify="space-between">
-                    <Text>Trek Fee:</Text>
-                    <Text strong>₹{kuariPassData.pricing.trekFee.toLocaleString('en-IN')}</Text>
-                  </Row>
-                  <Row justify="space-between">
-                    <Text>Transportation Fee:</Text>
-                    <Text strong>₹{kuariPassData.pricing.transportationFee.toLocaleString('en-IN')}</Text>
-                  </Row>
-                  <hr style={{ margin: '12px 0', border: '1px solid #e8e8e8' }} />
-                  <Row justify="space-between">
-                    <Text strong style={{ fontSize: '16px' }}>Total Cost:</Text>
-                    <Text strong style={{ fontSize: '18px', color: '#52c41a' }}>
-                      ₹{kuariPassData.pricing.totalCostWithTransport.toLocaleString('en-IN')}
-                    </Text>
-                  </Row>
-                </Space>
-              </div>
-            </Col>
-            <Col xs={24} md={12}>
-              <div style={{ 
-                background: isDarkMode ? '#262626' : 'white', 
-                padding: '20px', 
-                borderRadius: '8px',
-                border: '1px solid #e8e8e8'
-              }}>
-                <Title level={4} style={{ color: '#d4a574', marginBottom: '16px' }}>
-                  Payment Schedule
-                </Title>
-                <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                  <Row justify="space-between">
-                    <Text>Registration Fee (Now):</Text>
-                    <Text strong style={{ color: '#ff4d4f' }}>
-                      ₹{kuariPassData.pricing.registrationFee.toLocaleString('en-IN')}
-                    </Text>
-                  </Row>
-                  <Row justify="space-between">
-                    <Text>Remaining Amount:</Text>
-                    <Text strong>₹{kuariPassData.pricing.remainingAmountWithTransport.toLocaleString('en-IN')}</Text>
-                  </Row>
-                  <Row justify="space-between">
-                    <Text>Payment Deadline:</Text>
-                    <Text strong style={{ color: '#1890ff' }}>
-                      {kuariPassData.pricing.paymentDeadline}
-                    </Text>
-                  </Row>
-                </Space>
+        {/* Pricing Breakdown - Only show if pricing is available */}
+        {(selectedTrek.pricing.totalCostWithTransport > 0 || selectedTrek.pricing.totalCostWithoutTransport > 0) && (
+          <Card 
+            title="Package Pricing" 
+            style={{ 
+              marginTop: '40px', 
+              borderRadius: '12px',
+              background: isDarkMode ? '#1a1a1a' : '#f8f9fa'
+            }}
+          >
+            <Row gutter={[24, 24]}>
+              <Col xs={24} md={12}>
                 <div style={{ 
-                  marginTop: '16px', 
-                  padding: '12px', 
-                  background: '#fff7e6', 
-                  borderRadius: '6px',
-                  border: '1px solid #ffd591'
+                  background: isDarkMode ? '#262626' : 'white', 
+                  padding: '20px', 
+                  borderRadius: '8px',
+                  border: '1px solid #e8e8e8'
                 }}>
-                  <Text style={{ fontSize: '12px', color: '#d46b08' }}>
-                    📞 Contact: +91 79834 14419 for booking
-                  </Text>
-                </div>
-              </div>
-            </Col>
-          </Row>
-        </Card>
-
-        {/* Cancellation Policy */}
-        <Card 
-          title="Cancellation Policy" 
-          style={{ 
-            marginTop: '40px', 
-            borderRadius: '12px',
-            background: isDarkMode ? '#1a1a1a' : '#f8f9fa'
-          }}
-        >
-          <Row gutter={[16, 16]}>
-            {kuariPassData.cancellationPolicy.map((policy, index) => (
-              <Col xs={24} sm={12} lg={6} key={index}>
-                <Card 
-                  size="small"
-                  style={{ 
-                    background: isDarkMode ? '#262626' : 'white',
-                    border: '1px solid #e8e8e8',
-                    textAlign: 'center'
-                  }}
-                >
+                  <Title level={4} style={{ color: '#d4a574', marginBottom: '16px' }}>
+                    Cost Breakdown
+                  </Title>
                   <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                    <Text strong style={{ fontSize: '12px', color: '#666' }}>
-                      {policy.period}
-                    </Text>
-                    <Text style={{ color: '#ff4d4f', fontSize: '14px' }}>
-                      Fee: {policy.fee}
-                    </Text>
-                    <Text style={{ color: '#52c41a', fontSize: '12px' }}>
-                      Refund: {policy.refund}
-                    </Text>
+                    {selectedTrek.pricing.trekFee > 0 && (
+                      <Row justify="space-between">
+                        <Text>Trek Fee:</Text>
+                        <Text strong>₹{selectedTrek.pricing.trekFee.toLocaleString('en-IN')}</Text>
+                      </Row>
+                    )}
+                    {selectedTrek.pricing.transportationFee > 0 && (
+                      <Row justify="space-between">
+                        <Text>Transportation Fee:</Text>
+                        <Text strong>₹{selectedTrek.pricing.transportationFee.toLocaleString('en-IN')}</Text>
+                      </Row>
+                    )}
+                    {/* Show GST for Sandakphu trek */}
+                    {selectedTrek.id === 'sandakphu' && selectedTrek.pricing.trekFee > 0 && (
+                      <Row justify="space-between">
+                        <Text>GST (5%):</Text>
+                        <Text strong>₹{(selectedTrek.pricing.trekFee * 0.05).toLocaleString('en-IN')}</Text>
+                      </Row>
+                    )}
+                    <hr style={{ margin: '12px 0', border: '1px solid #e8e8e8' }} />
+                    <Row justify="space-between">
+                      <Text strong style={{ fontSize: '16px' }}>
+                        Total Cost{selectedTrek.id === 'sandakphu' ? ' (incl. GST)' : ''}:
+                      </Text>
+                      <Text strong style={{ fontSize: '18px', color: '#52c41a' }}>
+                        ₹{(selectedTrek.pricing.totalCostWithTransport > 0 
+                          ? selectedTrek.pricing.totalCostWithTransport 
+                          : selectedTrek.pricing.totalCostWithoutTransport).toLocaleString('en-IN')}
+                      </Text>
+                    </Row>
                   </Space>
-                </Card>
+                </div>
               </Col>
-            ))}
-          </Row>
-        </Card>
+              <Col xs={24} md={12}>
+                <div style={{ 
+                  background: isDarkMode ? '#262626' : 'white', 
+                  padding: '20px', 
+                  borderRadius: '8px',
+                  border: '1px solid #e8e8e8'
+                }}>
+                  <Title level={4} style={{ color: '#d4a574', marginBottom: '16px' }}>
+                    Payment Schedule
+                  </Title>
+                  <Space direction="vertical" size="small" style={{ width: '100%' }}>
+                    <Row justify="space-between">
+                      <Text>Registration Fee (Now):</Text>
+                      <Text strong style={{ color: '#ff4d4f' }}>
+                        ₹{selectedTrek.pricing.registrationFee.toLocaleString('en-IN')}
+                      </Text>
+                    </Row>
+{(selectedTrek.pricing.remainingAmountWithTransport > 0 || selectedTrek.pricing.remainingAmountWithoutTransport > 0) && (
+                      <Row justify="space-between">
+                        <Text>Remaining Amount:</Text>
+                        <Text strong>
+                          ₹{(selectedTrek.pricing.remainingAmountWithTransport > 0 
+                            ? selectedTrek.pricing.remainingAmountWithTransport 
+                            : selectedTrek.pricing.remainingAmountWithoutTransport).toLocaleString('en-IN')}
+                        </Text>
+                      </Row>
+                    )}
+                    <Row justify="space-between">
+                      <Text>Payment Deadline:</Text>
+                      <Text strong style={{ color: '#1890ff' }}>
+                        {selectedTrek.pricing.paymentDeadline}
+                      </Text>
+                    </Row>
+                  </Space>
+                  <div style={{ 
+                    marginTop: '16px', 
+                    padding: '12px', 
+                    background: '#fff7e6', 
+                    borderRadius: '6px',
+                    border: '1px solid #ffd591'
+                  }}>
+                    <Text style={{ fontSize: '12px', color: '#d46b08' }}>
+                      📞 Contact: +91 79834 14419 for booking
+                    </Text>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          </Card>
+        )}
+
+        {/* Cancellation Policy - Only show if policies exist */}
+        {selectedTrek.cancellationPolicy.length > 0 && (
+          <Card 
+            title="Cancellation Policy" 
+            style={{ 
+              marginTop: '40px', 
+              borderRadius: '12px',
+              background: isDarkMode ? '#1a1a1a' : '#f8f9fa'
+            }}
+          >
+            <Row gutter={[16, 16]}>
+              {selectedTrek.cancellationPolicy.map((policy, index) => (
+                <Col xs={24} sm={12} lg={6} key={index}>
+                  <Card 
+                    size="small"
+                    style={{ 
+                      background: isDarkMode ? '#262626' : 'white',
+                      border: '1px solid #e8e8e8',
+                      textAlign: 'center'
+                    }}
+                  >
+                    <Space direction="vertical" size="small" style={{ width: '100%' }}>
+                      <Text strong style={{ fontSize: '12px', color: '#666' }}>
+                        {policy.period}
+                      </Text>
+                      <Text style={{ color: '#ff4d4f', fontSize: '14px' }}>
+                        Fee: {policy.fee}
+                      </Text>
+                      <Text style={{ color: '#52c41a', fontSize: '12px' }}>
+                        Refund: {policy.refund}
+                      </Text>
+                    </Space>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </Card>
+        )}
 
       </div>
 
@@ -515,7 +646,16 @@ const UpcomingPage: React.FC = () => {
                       <Button 
                         type="primary" 
                         size="large"
-                        onClick={() => setBookingModalOpen(true)}
+                        onClick={() => {
+                          // Only Kuari Pass opens the modal
+                          if (selectedTrek.id === 'kuari-pass') {
+                            setBookingModalOpen(true);
+                          } else if (selectedTrek.registrationLink) {
+                            // Other treks with registration link
+                            window.open(selectedTrek.registrationLink, '_blank');
+                          }
+                          // If no registration link yet, do nothing
+                        }}
                         className="booking-button"
                       >
                         🎯 Book Your Slot Now
@@ -562,10 +702,10 @@ const UpcomingPage: React.FC = () => {
       <BookingModal 
         open={bookingModalOpen} 
         onClose={() => setBookingModalOpen(false)}
-        trekTitle={kuariPassData.title}
-        pricing={kuariPassData.pricing}
-        paymentLinks={kuariPassData.paymentLinks}
-        transportationRoute="Dehradun to Dehradun"
+        trekTitle={selectedTrek.title}
+        pricing={selectedTrek.pricing}
+        paymentLinks={selectedTrek.paymentLinks}
+        transportationRoute={selectedTrek.transportationRoute || 'To be announced'}
       />
 
       {/* Upcoming Adventures Drawer */}

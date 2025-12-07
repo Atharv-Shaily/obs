@@ -3,54 +3,10 @@ import groupPrevious from './group-previous.png';
 import kuariTaliLake from './Kuari-Pass-Trek-Tali-Lake.webp';
 import kuariScenery from './kuari-scenery.avif';
 import kuariPassBrochure from './Kuari Pass Trek Brochure (Oh Bhaisahab Experience).pdf';
+import type { TrekData } from '../TrekData';
 
-export type PaymentLinks = {
-  fullPaymentWithTransport: string;
-  fullPaymentWithoutTransport: string;
-  registrationOnly: string;
-  remainingDuesWithTransport: string;
-  remainingDuesWithoutTransport: string;
-}
-
-export type PricingDetails = {
-  trekFee: number;
-  transportationFee: number;
-  totalCostWithTransport: number;
-  totalCostWithoutTransport: number;
-  registrationFee: number;
-  remainingAmountWithTransport: number;
-  remainingAmountWithoutTransport: number;
-  paymentDeadline: string;
-}
-
-export type KuariPassData = {
-  title: string;
-  date: string;
-  duration: string;
-  difficulty: string;
-  location: string;
-  images: string[];
-  brochure: string;
-  description: string;
-  highlights: string[];
-  itinerary: Array<{
-    day: string;
-    title: string;
-    description: string;
-    type: string;
-  }>;
-  inclusions: string[];
-  exclusions: string[];
-  pricing: PricingDetails;
-  paymentLinks: PaymentLinks;
-  cancellationPolicy: Array<{
-    period: string;
-    fee: string;
-    refund: string;
-  }>;
-}
-
-export const kuariPassData: KuariPassData = {
+export const kuariPassData: TrekData = {
+  id: 'kuari-pass',
   title: 'Kuari Pass Trek - Winter Wonderland',
   date: 'December 25-30, 2025',
   duration: '6 Days / 5 Nights',
@@ -166,6 +122,8 @@ export const kuariPassData: KuariPassData = {
       fee: '100%',
       refund: 'Non-refundable'
     }
-  ]
+  ],
+  videoUrl: 'https://www.youtube.com/embed/9czKeIJJGjQ',
+  transportationRoute: 'Dehradun to Dehradun'
 };
 

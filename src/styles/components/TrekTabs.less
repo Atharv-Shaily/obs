@@ -1,0 +1,231 @@
+// Trek Navigation Tabs Styling
+
+// Light Mode
+.ant-tabs {
+  .ant-tabs-tab {
+    padding: 14px 24px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    
+    @media (max-width: 768px) {
+      padding: 12px 18px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 480px) {
+      padding: 14px 20px;
+      font-size: 14px;
+      min-width: auto;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      color: #d4a574;
+    }
+  }
+
+  .ant-tabs-tab-active {
+    .ant-tabs-tab-btn {
+      color: #d4a574;
+      font-weight: 600;
+    }
+  }
+
+  .ant-tabs-ink-bar {
+    background: #d4a574;
+    height: 3px;
+    
+    @media (max-width: 480px) {
+      height: 3px;
+    }
+  }
+
+  .ant-tabs-nav {
+    margin-bottom: 0;
+    
+    @media (max-width: 480px) {
+      padding: 8px 0;
+    }
+  }
+  
+  // Hide ellipsis button completely
+  .ant-tabs-nav-more {
+    display: none !important;
+  }
+  
+  // Ensure all tabs are visible in scroll mode
+  .ant-tabs-nav-operations {
+    display: none !important;
+  }
+}
+
+// Dark Mode
+.dark-mode {
+  .ant-tabs {
+    .ant-tabs-tab {
+      color: #e5e5e5;
+
+      &:hover {
+        color: #d4a574;
+      }
+    }
+
+    .ant-tabs-tab-active {
+      .ant-tabs-tab-btn {
+        color: #d4a574;
+      }
+    }
+
+    .ant-tabs-ink-bar {
+      background: #d4a574;
+    }
+  }
+}
+
+// Trek Content Container
+.trek-content-container {
+  padding: 40px 24px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 30px 20px 60px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 0 50px;
+  }
+}
+
+// Trek Tabs Card Container
+.trek-tabs-card {
+  margin-bottom: 32px;
+  margin-top: -60px;
+  position: relative;
+  z-index: 10;
+  border-radius: 16px;
+  
+  &.light-mode {
+    background: #ffffff;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  }
+  
+  &.dark-mode {
+    background: #1a1a1a;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    margin-top: -50px;
+    margin-bottom: 28px;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 0;
+    margin-bottom: 24px;
+    border-radius: 0;
+    box-shadow: none;
+    border-bottom: 2px solid rgba(212, 165, 116, 0.2);
+    
+    &.dark-mode {
+      border-bottom: 2px solid rgba(212, 165, 116, 0.3);
+    }
+  }
+}
+
+// Make tabs scrollable on small screens
+.ant-tabs-nav-wrap {
+  @media (max-width: 768px) {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #d4a574;
+      border-radius: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #c39563;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 16px;
+    overflow-x: scroll;
+    
+    // Hide scrollbar but keep functionality
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
+.ant-tabs-nav-list {
+  @media (max-width: 480px) {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding-right: 40px; // Extra padding to ensure last tab is fully visible
+  }
+}
+
+// Additional padding for mobile tabs container
+@media (max-width: 480px) {
+  .trek-tabs-card {
+    .ant-tabs-nav {
+      padding-right: 16px;
+    }
+  }
+}
+
+// Trek card animation
+.trek-content-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Trek tab special styling
+.trek-tab-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  .trek-name {
+    font-weight: 500;
+  }
+
+  .trek-date {
+    font-size: 11px;
+    opacity: 0.7;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+}
+
