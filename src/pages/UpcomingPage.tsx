@@ -1,9 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { Row, Col, Typography, Card, Button, Space, Tag, Alert, Carousel, FloatButton, Tabs } from 'antd';
+import { Row, Col, Typography, Card, Button, Space, Tag, Alert, Carousel, Tabs } from 'antd';
 import type { CarouselRef } from 'antd/es/carousel';
-import { CalendarOutlined, EnvironmentOutlined, ClockCircleOutlined, WalletOutlined, DownloadOutlined, CreditCardOutlined, LeftOutlined, RightOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import { CalendarOutlined, EnvironmentOutlined, ClockCircleOutlined, WalletOutlined, DownloadOutlined, CreditCardOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { useDarkMode } from '../contexts/DarkModeContext';
-import UpcomingDrawer from '../components/UpcomingDrawer';
 import BookingModal from '../components/BookingModal';
 import { kuariPassData } from '../assets/treks/kuari/KuariPassData';
 import { brahmatalData } from '../assets/treks/bhramtal/BrahmatalData';
@@ -15,6 +14,9 @@ import '../styles/components/UpcomingPage.less';
 import '../styles/components/CarouselCustom.less';
 import '../styles/components/TrekTabs.less';
 import grasslandMountain from '../assets/treks/yulla/grassland-mountain.jpg';
+import kedarkanthaHero from '../assets/treks/kedarkantha/kedarkantha.jpg';
+import brahmatalHero from '../assets/treks/bhramtal/bhramtal.jpg';
+import sandakphuHero from '../assets/treks/sandakhpu/sandakhpu.jpg';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -31,7 +33,6 @@ const UpcomingPage: React.FC = () => {
   const paymentMessageRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<CarouselRef>(null);
   const trekContentRef = useRef<HTMLDivElement>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [selectedTrek, setSelectedTrek] = useState<TrekData>(allTreks[0]);
 
@@ -91,6 +92,21 @@ const UpcomingPage: React.FC = () => {
     }
   };
 
+  // Get hero image based on selected trek
+  const getHeroImage = () => {
+    switch (selectedTrek.id) {
+      case 'kedarkantha':
+        return kedarkanthaHero;
+      case 'brahmatal':
+        return brahmatalHero;
+      case 'sandakphu':
+        return sandakphuHero;
+      case 'kuari-pass':
+      default:
+        return grasslandMountain;
+    }
+  };
+
   // Create tabs items for Ant Design Tabs
   const tabItems = allTreks.map(trek => ({
     key: trek.id,
@@ -108,10 +124,13 @@ const UpcomingPage: React.FC = () => {
     <div className={`upcoming-page-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
       <div 
         className="hero-section" 
-        style={{ backgroundImage: `url(${grasslandMountain})` }}
+        style={{ 
+          '--desktop-bg': `url(${grasslandMountain})`,
+          '--mobile-bg': `url(${getHeroImage()})`
+        } as React.CSSProperties}
       >
-        <div className="hero-overlay" />
-        <div className="hero-content">
+        <div className={`hero-overlay ${selectedTrek.id !== 'kuari-pass' ? 'hide-on-mobile' : ''}`} />
+        <div className={`hero-content ${selectedTrek.id !== 'kuari-pass' ? 'hide-on-mobile' : ''}`}>
           <Title level={1} className="hero-title">
             Upcoming OBS Experiences
           </Title>
@@ -706,28 +725,6 @@ const UpcomingPage: React.FC = () => {
         pricing={selectedTrek.pricing}
         paymentLinks={selectedTrek.paymentLinks}
         transportationRoute={selectedTrek.transportationRoute || 'To be announced'}
-      />
-
-      {/* Upcoming Adventures Drawer */}
-      <UpcomingDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
-
-      {/* Floating Action Button */}
-      <FloatButton
-        icon={<ThunderboltOutlined />}
-        type="primary"
-        tooltip={<div>More Upcoming Adventures</div>}
-        onClick={() => setDrawerOpen(true)}
-        style={{
-          right: 24,
-          bottom: 24,
-          width: 56,
-          height: 56,
-          background: isDarkMode ? '#ffffff' : '#1a1a1a',
-          color: isDarkMode ? '#1a1a1a' : '#ffffff',
-          boxShadow: isDarkMode 
-            ? '0 4px 16px rgba(255, 255, 255, 0.3)' 
-            : '0 4px 16px rgba(0, 0, 0, 0.4)'
-        }}
       />
     </div>
   );

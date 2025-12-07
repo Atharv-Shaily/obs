@@ -34,8 +34,9 @@
 
 // Standard Hero Section
 .hero-section {
+  background-image: var(--desktop-bg);
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
   position: relative;
   padding: 60px 24px 100px;
@@ -45,6 +46,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transition: background-image 0.5s ease-in-out;
 
   .hero-overlay {
     position: absolute;
@@ -52,7 +54,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 1;
   }
 
@@ -90,11 +92,21 @@
 
   // Mobile responsive improvements
   @media (max-width: 768px) {
-    padding: 40px 16px 80px;
-    min-height: 50vh;
+    background-image: var(--mobile-bg);
+    padding: 50px 16px 90px;
+    min-height: 45vh;
+    background-position: center 35%;
     
     .hero-overlay {
-      background: rgba(0, 0, 0, 0.6); // Darker overlay for better text readability
+      background: rgba(0, 0, 0, 0.65); // Darker overlay for better text readability
+      
+      &.hide-on-mobile {
+        background: rgba(0, 0, 0, 0); // No overlay when text is hidden
+      }
+    }
+
+    .hero-content.hide-on-mobile {
+      display: none;
     }
     
     .hero-content {
@@ -120,11 +132,16 @@
   }
   
   @media (max-width: 480px) {
-    padding: 40px 16px 32px;
-    min-height: 35vh;
+    padding: 40px 16px 60px;
+    min-height: 40vh;
+    background-position: center 30%;
     
     .hero-overlay {
-      background: rgba(0, 0, 0, 0.7); // Even darker overlay for small screens
+      background: rgba(0, 0, 0, 0.75); // Even darker overlay for small screens
+      
+      &.hide-on-mobile {
+        background: rgba(0, 0, 0, 0); // No overlay when text is hidden
+      }
     }
     
     .hero-content {
