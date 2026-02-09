@@ -74,71 +74,144 @@ const HomePage: React.FC = () => {
         <Title level={2} className={`section-title ${isDarkMode ? 'dark-mode' : ''}`}>
           🏔️ Upcoming Experiences
         </Title>
-        <Row gutter={[24, 24]}>
-          {featuredTreks.map((trek) => (
-            <Col xs={24} md={12} key={trek.id}>
+        {featuredTreks.length === 1 ? (
+          // Single trek layout: image left, content right
+          <Row gutter={[24, 24]} justify="center">
+            <Col xs={24} lg={20} xl={18}>
               <Card 
                 hoverable
-                className={`featured-trek-card ${isDarkMode ? 'dark-mode' : ''}`}
-                cover={
-                  <div className="featured-trek-image-container">
-                    <img 
-                      alt={trek.title} 
-                      src={trek.image} 
-                      className="featured-trek-image"
-                    />
-                    <div className="featured-trek-overlay">
-                      <Tag color="#ff4d4f" className="live-tag">
-                        <span className="live-dot" /> UPCOMING
-                      </Tag>
-                    </div>
-                  </div>
-                }
+                className={`featured-trek-card featured-trek-card-single ${isDarkMode ? 'dark-mode' : ''}`}
+                bodyStyle={{ padding: 0 }}
               >
-                <div className="featured-trek-content">
-                  <Title level={3} className="featured-trek-title">
-                    {trek.title}
-                  </Title>
-                  <Paragraph className="featured-trek-subtitle">
-                    {trek.subtitle}
-                  </Paragraph>
-                  
-                  <Space wrap className="featured-trek-tags">
-                    <Tag icon={<CalendarOutlined />} color="blue">{trek.date}</Tag>
-                    <Tag icon={<ClockCircleOutlined />} color="green">{trek.duration}</Tag>
-                  </Space>
-                  
-                  <div className="featured-trek-location">
-                    <EnvironmentOutlined /> {trek.location}
-                  </div>
-                  
-                  <ul className="featured-trek-highlights">
-                    {trek.highlights.map((h, i) => (
-                      <li key={i}>{h}</li>
-                    ))}
-                  </ul>
-                  
-                  <div className="featured-trek-footer">
-                    <div className="featured-trek-price">
-                      <span className="price">{trek.price}</span>
-                      <span className="price-note">{trek.priceNote}</span>
+                <Row gutter={[0, 0]}>
+                  <Col xs={24} lg={12}>
+                    <div className="featured-trek-image-container">
+                      <img 
+                        alt={featuredTreks[0].title} 
+                        src={featuredTreks[0].image} 
+                        className="featured-trek-image"
+                      />
+                      <div className="featured-trek-overlay">
+                        <Tag color="#ff4d4f" className="live-tag">
+                          <span className="live-dot" /> UPCOMING
+                        </Tag>
+                      </div>
                     </div>
-                    <Button 
-                      type="primary" 
-                      icon={<ArrowRightOutlined />}
-                      onClick={() => {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                        navigate(`/upcoming?trek=${trek.id}`);
-                      }}
-                    >
-                      View Details
-                    </Button>
-                  </div>
-                </div>
+                  </Col>
+                  <Col xs={24} lg={12}>
+                    <div className="featured-trek-content">
+                      <Title level={3} className="featured-trek-title">
+                        {featuredTreks[0].title}
+                      </Title>
+                      <Paragraph className="featured-trek-subtitle">
+                        {featuredTreks[0].subtitle}
+                      </Paragraph>
+                      
+                      <Space wrap className="featured-trek-tags">
+                        <Tag icon={<CalendarOutlined />} color="blue">{featuredTreks[0].date}</Tag>
+                        <Tag icon={<ClockCircleOutlined />} color="green">{featuredTreks[0].duration}</Tag>
+                      </Space>
+                      
+                      <div className="featured-trek-location">
+                        <EnvironmentOutlined /> {featuredTreks[0].location}
+                      </div>
+                      
+                      <ul className="featured-trek-highlights">
+                        {featuredTreks[0].highlights.map((h, i) => (
+                          <li key={i}>{h}</li>
+                        ))}
+                      </ul>
+                      
+                      <div className="featured-trek-footer">
+                        <div className="featured-trek-price">
+                          <span className="price">{featuredTreks[0].price}</span>
+                          <span className="price-note">{featuredTreks[0].priceNote}</span>
+                        </div>
+                        <Button 
+                          type="primary" 
+                          icon={<ArrowRightOutlined />}
+                          onClick={() => {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                            navigate(`/upcoming?trek=${featuredTreks[0].id}`);
+                          }}
+                        >
+                          View Details
+                        </Button>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
               </Card>
             </Col>
-          ))}
-        </Row>
+          </Row>
+        ) : (
+          // Multiple treks layout: grid
+          <Row gutter={[24, 24]}>
+            {featuredTreks.map((trek) => (
+              <Col xs={24} md={12} key={trek.id}>
+                <Card 
+                  hoverable
+                  className={`featured-trek-card ${isDarkMode ? 'dark-mode' : ''}`}
+                  cover={
+                    <div className="featured-trek-image-container">
+                      <img 
+                        alt={trek.title} 
+                        src={trek.image} 
+                        className="featured-trek-image"
+                      />
+                      <div className="featured-trek-overlay">
+                        <Tag color="#ff4d4f" className="live-tag">
+                          <span className="live-dot" /> UPCOMING
+                        </Tag>
+                      </div>
+                    </div>
+                  }
+                >
+                  <div className="featured-trek-content">
+                    <Title level={3} className="featured-trek-title">
+                      {trek.title}
+                    </Title>
+                    <Paragraph className="featured-trek-subtitle">
+                      {trek.subtitle}
+                    </Paragraph>
+                    
+                    <Space wrap className="featured-trek-tags">
+                      <Tag icon={<CalendarOutlined />} color="blue">{trek.date}</Tag>
+                      <Tag icon={<ClockCircleOutlined />} color="green">{trek.duration}</Tag>
+                    </Space>
+                    
+                    <div className="featured-trek-location">
+                      <EnvironmentOutlined /> {trek.location}
+                    </div>
+                    
+                    <ul className="featured-trek-highlights">
+                      {trek.highlights.map((h, i) => (
+                        <li key={i}>{h}</li>
+                      ))}
+                    </ul>
+                    
+                    <div className="featured-trek-footer">
+                      <div className="featured-trek-price">
+                        <span className="price">{trek.price}</span>
+                        <span className="price-note">{trek.priceNote}</span>
+                      </div>
+                      <Button 
+                        type="primary" 
+                        icon={<ArrowRightOutlined />}
+                        onClick={() => {
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                          navigate(`/upcoming?trek=${trek.id}`);
+                        }}
+                      >
+                        View Details
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        )}
       </div>
 
       {/* About OBS Section */}

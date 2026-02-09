@@ -6,7 +6,6 @@ import { useSearchParams } from 'react-router-dom';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import BookingModal from '../components/BookingModal';
 import { brahmatalData } from '../assets/treks/bhramtal/BrahmatalData';
-import { sandakphuData } from '../assets/treks/sandakhpu/SandakphuData';
 import type { TrekData } from '../assets/treks/TrekData';
 import '../styles/components/HeroSection.less';
 import '../styles/components/UpcomingPage.less';
@@ -20,8 +19,7 @@ const { Title, Paragraph, Text } = Typography;
 
 // All available treks
 const allTreks: TrekData[] = [
-  brahmatalData,
-  sandakphuData
+  brahmatalData
   
 ];
 
@@ -167,25 +165,27 @@ const UpcomingPage: React.FC = () => {
 
       <div ref={trekContentRef} className="trek-content-container">
         {/* Trek Navigation Tabs */}
-        <Card 
-          className={`trek-tabs-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}
-          bodyStyle={{ padding: '0' }}
-        >
-          <Tabs
-            activeKey={selectedTrek.id}
-            onChange={handleTrekChange}
-            centered
-            size="large"
-            items={tabItems}
-            style={{ 
-              padding: '0 16px',
-            }}
-            tabBarStyle={{
-              marginBottom: 0,
-              borderBottom: `1px solid ${isDarkMode ? '#404040' : '#f0f0f0'}`
-            }}
-          />
-        </Card>
+        {allTreks.length > 1 && (
+          <Card 
+            className={`trek-tabs-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}
+            bodyStyle={{ padding: '0' }}
+          >
+            <Tabs
+              activeKey={selectedTrek.id}
+              onChange={handleTrekChange}
+              centered
+              size="large"
+              items={tabItems}
+              style={{ 
+                padding: '0 16px',
+              }}
+              tabBarStyle={{
+                marginBottom: 0,
+                borderBottom: `1px solid ${isDarkMode ? '#404040' : '#f0f0f0'}`
+              }}
+            />
+          </Card>
+        )}
 
         {/* Main Experience Card */}
           <Card 
