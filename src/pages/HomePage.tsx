@@ -17,6 +17,7 @@ const HomePage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
   const carouselRef = useRef<CarouselRef>(null);
   const navigate = useNavigate();
+  
 
   const signatureActivities = [
     {
