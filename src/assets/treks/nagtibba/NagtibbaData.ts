@@ -87,4 +87,10 @@ export const nagtibbaData: TrekData = {
   allGirlsTrip: true,
   specialPackageNote: 'Pilani to Pilani package',
   specialPackagePhone: '7983414419',
+  specialOffer: {
+    label: "Women's Day Special",
+    originalPrice: 5999,
+    offerPrice: 4999,
+    validOn: { month: 3, day: 8 },
+  },
 };

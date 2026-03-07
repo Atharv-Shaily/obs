@@ -56,5 +56,13 @@ export type TrekData = {
   /** Special package note (e.g. "Pilani to Pilani - call for details") */
   specialPackageNote?: string;
   specialPackagePhone?: string;
+  /** Time-limited special offer — when active replaces the displayed price */
+  specialOffer?: {
+    label: string;
+    originalPrice: number;
+    offerPrice: number;
+    /** IST date on which this offer is valid (month is 1-indexed) */
+    validOn: { month: number; day: number };
+  };
 }
 

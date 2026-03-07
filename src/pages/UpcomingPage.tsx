@@ -10,6 +10,7 @@ import { nagtibbaData } from '../assets/treks/nagtibba/NagtibbaData';
 import { keralaData } from '../assets/treks/kerala/KeralaData';
 import type { TrekData } from '../assets/treks/TrekData';
 import '../styles/components/HeroSection.less';
+import { getActiveOffer } from '../utils/specialOffer';
 import '../styles/components/UpcomingPage.less';
 import '../styles/components/CarouselCustom.less';
 import '../styles/components/TrekTabs.less';
@@ -49,6 +50,8 @@ const UpcomingPage: React.FC = () => {
   };
   
   const [selectedTrek, setSelectedTrek] = useState<TrekData>(getInitialTrek());
+
+  const activeOffer = getActiveOffer(selectedTrek);
 
   // Treks that use UPI payment (no PayU link)
   const useUpiPayment = selectedTrek.id === 'nagtibba' || selectedTrek.id === 'kerala';
@@ -311,21 +314,21 @@ const UpcomingPage: React.FC = () => {
                       {selectedTrek.pricing.totalCostWithTransport > 0 && (
                         <Col xs={24} sm={selectedTrek.pricing.totalCostWithoutTransport > 0 ? 12 : 24}>
                           <div className={`pricing-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
-                            {selectedTrek.pricing.originalPrice != null && (
+                            {(selectedTrek.pricing.originalPrice != null || activeOffer != null) && (
                               <>
                                 <Text delete style={{ fontSize: '14px', color: isDarkMode ? '#737373' : '#666', marginRight: 8 }}>
-                                  ₹{selectedTrek.pricing.originalPrice.toLocaleString('en-IN')}
+                                  ₹{(activeOffer?.originalPrice ?? selectedTrek.pricing.originalPrice)!.toLocaleString('en-IN')}
                                 </Text>
                                 <Text strong className="price-amount with-transport" style={{ color: '#059669' }}>
-                                  ₹{selectedTrek.pricing.totalCostWithTransport.toLocaleString('en-IN')}
+                                  ₹{(activeOffer?.offerPrice ?? selectedTrek.pricing.totalCostWithTransport).toLocaleString('en-IN')}
                                 </Text>
                                 <br />
                                 <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`} style={{ color: '#059669' }}>
-                                  Early bird discount
+                                  {activeOffer ? activeOffer.label : 'Early bird discount'}
                                 </Text>
                               </>
                             )}
-                            {selectedTrek.pricing.originalPrice == null && (
+                            {selectedTrek.pricing.originalPrice == null && activeOffer == null && (
                               <>
                                 <Text strong className="price-amount with-transport">₹{selectedTrek.pricing.totalCostWithTransport.toLocaleString('en-IN')}</Text>
                                 <br />
@@ -636,12 +639,12 @@ const UpcomingPage: React.FC = () => {
                       <Row justify="space-between">
                         <Text>Trek Fee:</Text>
                         <span>
-                          {selectedTrek.pricing.originalPrice != null && (
+                          {(selectedTrek.pricing.originalPrice != null || activeOffer != null) && (
                             <Text delete style={{ fontSize: '13px', color: isDarkMode ? '#737373' : '#999', marginRight: 6 }}>
-                              ₹{selectedTrek.pricing.originalPrice.toLocaleString('en-IN')}
+                              ₹{(activeOffer?.originalPrice ?? selectedTrek.pricing.originalPrice)!.toLocaleString('en-IN')}
                             </Text>
                           )}
-                          <Text strong>₹{selectedTrek.pricing.trekFee.toLocaleString('en-IN')}</Text>
+                          <Text strong>₹{(activeOffer?.offerPrice ?? selectedTrek.pricing.trekFee).toLocaleString('en-IN')}</Text>
                         </span>
                       </Row>
                     )}
@@ -657,9 +660,9 @@ const UpcomingPage: React.FC = () => {
                         Total Cost:
                       </Text>
                       <Text strong style={{ fontSize: '18px', color: '#52c41a' }}>
-                        ₹{(selectedTrek.pricing.totalCostWithTransport > 0 
-                          ? selectedTrek.pricing.totalCostWithTransport 
-                          : selectedTrek.pricing.totalCostWithoutTransport).toLocaleString('en-IN')}
+                        ₹{(activeOffer?.offerPrice ?? (selectedTrek.pricing.totalCostWithTransport > 0
+                          ? selectedTrek.pricing.totalCostWithTransport
+                          : selectedTrek.pricing.totalCostWithoutTransport)).toLocaleString('en-IN')}
                       </Text>
                     </Row>
                   </Space>
