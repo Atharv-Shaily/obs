@@ -16,11 +16,10 @@ export const nagtibbaData: TrekData = {
   images: [nagtibba1, nagtibba2, nagtibba3, nagtibba4],
   brochure: nagtibbaBrochure,
   description:
-    'A perfect weekend trek to Nagtibba with stunning Himalayan views. This all-girls trip is designed for women who want to explore the mountains in a supportive, fun group. Dehradun to Dehradun package includes transport. Pay ₹1,500 now and ₹4,000 by 15 March.',
+    'A perfect weekend trek to Nagtibba with stunning Himalayan views. This all-girls trip is designed for women who want to explore the mountains in a supportive, fun group. Dehradun to Dehradun package includes transport. Pay ₹1,500 now and rest before 15 March.',
   highlights: [
     'All girls trip – women-only group',
     'Nagtibba summit views',
-    'Dehradun to Dehradun: ₹5,500 (₹1,500 now, ₹4,000 by 15 March)',
     'Special Pilani to Pilani package – call for details',
     'Short and beginner-friendly',
     'Astro-Nite',
@@ -68,6 +67,7 @@ export const nagtibbaData: TrekData = {
   pricing: {
     trekFee: 5500,
     transportationFee: 0,
+    originalPrice: 5999,
     totalCostWithTransport: 5500,
     totalCostWithoutTransport: 0,
     registrationFee: 1500,

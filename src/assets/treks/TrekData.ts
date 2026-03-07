@@ -15,7 +15,7 @@ export type PricingDetails = {
   remainingAmountWithTransport: number;
   remainingAmountWithoutTransport: number;
   paymentDeadline: string;
-  /** Original price before discount (e.g. for early-bird display) */
+  /** Original price before discount (shown with strikethrough in pricing card and cost breakdown) */
   originalPrice?: number;
   /** Number of seats left at discounted price (e.g. "Only 2 seats left") */
   earlyBirdSeatsLeft?: number;

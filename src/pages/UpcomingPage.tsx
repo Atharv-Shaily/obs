@@ -635,7 +635,14 @@ const UpcomingPage: React.FC = () => {
                     {selectedTrek.pricing.trekFee > 0 && (
                       <Row justify="space-between">
                         <Text>Trek Fee:</Text>
-                        <Text strong>₹{selectedTrek.pricing.trekFee.toLocaleString('en-IN')}</Text>
+                        <span>
+                          {selectedTrek.pricing.originalPrice != null && (
+                            <Text delete style={{ fontSize: '13px', color: isDarkMode ? '#737373' : '#999', marginRight: 6 }}>
+                              ₹{selectedTrek.pricing.originalPrice.toLocaleString('en-IN')}
+                            </Text>
+                          )}
+                          <Text strong>₹{selectedTrek.pricing.trekFee.toLocaleString('en-IN')}</Text>
+                        </span>
                       </Row>
                     )}
                     {selectedTrek.pricing.transportationFee > 0 && (

@@ -30,6 +30,7 @@ export const featuredTreks = [
     date: 'April 3-5, 2026',
     duration: '3 Days / 2 Nights',
     location: 'Garhwal Himalayas, Uttarakhand',
+    originalPrice: '₹5,999',
     price: '₹5,500',
     priceNote: 'with transport, incl. GST',
     image: nagtibbaImg,
