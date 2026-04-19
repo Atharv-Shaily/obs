@@ -1,9 +1,13 @@
 // Import images
-import kuariRanges from '../assets/treks/kuari/kuari-ranges.png';
 import groupSummit from '../assets/treks/yulla/group-summit.png';
 import groupMountain from '../assets/treks/spiti/group-mountain.png';
 import groupBackpack from '../assets/treks/yulla/group-backpack.png';
 import kuariJuneImg from '../assets/treks/kuari/kuari-ranges.png';
+import trekGroup from '../assets/trek_group.png';
+import bhramtalGroup from '../assets/treks/bhramtal/bhrama_group.png';
+import nagTibbaGroup1 from '../assets/treks/nagtibba/nag_group.png'
+import nagTibbaGroup2 from '../assets/treks/nagtibba/nag_group_2.png'
+
 
 export const featuredTreks = [
   {
@@ -27,19 +31,31 @@ export const featuredTreks = [
 
 export const carouselImages = [
   {
-    src: kuariRanges,
-    alt: 'Kuari Pass Trek',
+    src: groupMountain,
+    alt: 'Spiti Valley',
   },
   {
     src: groupSummit,
     alt: 'Yulla Kanda Trek',
   },
   {
-    src: groupMountain,
-    alt: 'Spiti Valley',
+    src: trekGroup,
+    alt: 'Trek Group',
+  },
+  {
+    src: bhramtalGroup,
+    alt: 'Brahmatal Group',
   },
   {
     src: groupBackpack,
     alt: 'Yulla Kanda Trek Group with Backpack',
+  },
+  {
+    src: nagTibbaGroup1,
+    alt: 'Nagtibba Group 1',
+  },
+  {
+    src: nagTibbaGroup2,
+    alt: 'Nagtibba Group 2',
   },
 ];

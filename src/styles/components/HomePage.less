@@ -650,8 +650,15 @@
   padding: 8px 0;
   animation: home-reviews-scroll 55s linear infinite;
 
-  &:hover {
+  // Toggled from JS on touch/pen so tap can pause without sticky :hover.
+  &--paused {
     animation-play-state: paused;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      animation-play-state: paused;
+    }
   }
 }
 
@@ -665,9 +672,11 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
 
-  &:hover {
-    transform: scale(1.04);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: scale(1.04);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+    }
   }
 
   @media (max-width: 768px) {

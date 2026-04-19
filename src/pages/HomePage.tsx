@@ -1,9 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Row, Col, Typography, Card, Carousel, Button, Space, Tag } from 'antd';
 import type { CarouselRef } from 'antd/es/carousel';
 import { ArrowRightOutlined, EnvironmentOutlined, TeamOutlined, SafetyOutlined, LeftOutlined, RightOutlined, CalendarOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import { useNavigate } from 'react-router-dom';
+import { LazyYoutubeEmbed } from '../components/LazyYoutubeEmbed';
 import '../styles/components/HomePage.less';
 
 // Import images
@@ -25,7 +26,13 @@ const HomePage: React.FC = () => {
   const { isDarkMode } = useDarkMode();
   const carouselRef = useRef<CarouselRef>(null);
   const navigate = useNavigate();
-  
+  const [reviewsScrollPaused, setReviewsScrollPaused] = useState(false);
+
+  const toggleReviewsScrollOnTouch = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === 'touch' || e.pointerType === 'pen') {
+      setReviewsScrollPaused((p) => !p);
+    }
+  };
 
   const signatureActivities = [
     {
@@ -90,7 +97,10 @@ const HomePage: React.FC = () => {
         </Title>
         {featuredTreks.length === 1 ? (
           // Single trek layout: image left, content right
-          <Row gutter={[24, 24]} justify="center">
+          <Row gutter={[24, 24]} justify="center" onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            navigate(`/upcoming?trek=${featuredTreks[0].id}`);
+          }}>
             <Col xs={24} lg={20} xl={18}>
               <Card 
                 hoverable
@@ -257,16 +267,13 @@ const HomePage: React.FC = () => {
             </Paragraph>
           </Col>
           <Col xs={24} lg={12}>
-            <div className="youtube-short-container">
-              <iframe
-                src="https://www.youtube.com/embed/UCvyTOgNr8M"
-                title="Oh Bhaisahab Experiences - YouTube Short"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="youtube-short-iframe"
-              />
-            </div>
+            <LazyYoutubeEmbed
+              videoId="UCvyTOgNr8M"
+              title="Oh Bhaisahab Experiences - YouTube Short"
+              className="youtube-short-container"
+              iframeClassName="youtube-short-iframe"
+              embedParams={{ rel: 0 }}
+            />
           </Col>
         </Row>
       </div>
@@ -282,8 +289,8 @@ const HomePage: React.FC = () => {
             <div className="video-container">
               <div className="video-wrapper">
                 <iframe
-                  src="https://www.youtube.com/embed/DGmrc1FvoNo"
-                  title="Oh Bhaisahab Experiences - Adventure Video"
+                  src="https://www.youtube.com/embed/cX-znpm-Fcs"
+                  title="Oh-Bhaisahab Experiences on YouTube"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -365,7 +372,7 @@ const HomePage: React.FC = () => {
             <Card className="feature-card">
               <Title level={4}>🏔️ Experienced Trek Leader</Title>
               <Paragraph>
-                Led by Yatharth, an experienced trekker with 7+ years of Himalayan trekking experience, 
+                Led by Yatharth, an experienced trekker with 8+ years of Himalayan trekking experience, 
                 ensuring safe and transformative adventures with deep knowledge of terrain and culture.
               </Paragraph>
             </Card>
@@ -392,8 +399,9 @@ const HomePage: React.FC = () => {
             <Card className="feature-card">
               <Title level={4}>📸 Memorable Experiences</Title>
               <Paragraph>
-                From sunrise treks to cultural interactions, we create moments 
-                that will stay with you for a lifetime.
+                Oh-Bhaisahab Experiences blends trekking with signature OBS moments—Happiness
+                Sharing, Alpine Olympics, and nights under the stars, so every trip feels like
+                joining a tribe, not just ticking a trail off a list.
               </Paragraph>
             </Card>
           </Col>
@@ -402,11 +410,14 @@ const HomePage: React.FC = () => {
 
       {/* Tribe Reviews — right-to-left scrolling strip */}
       <div className={`content-section home-reviews-section ${isDarkMode ? 'dark' : 'light'}`}>
-        <Title level={2} className="section-title">
+        <Title level={2} className="section-title"> 
         What Our OBS Tribe Members Say
         </Title>
         <div className="home-reviews-scroll-wrapper">
-          <div className="home-reviews-scroll-track">
+          <div
+            className={`home-reviews-scroll-track${reviewsScrollPaused ? ' home-reviews-scroll-track--paused' : ''}`}
+            onPointerUp={toggleReviewsScrollOnTouch}
+          >
             {[...tribeReviews, ...tribeReviews].map((review, i) => (
               <img
                 key={i}

@@ -46,7 +46,7 @@ const UpcomingPage: React.FC = () => {
   const activeOffer = getActiveOffer(selectedTrek);
 
   // Treks that use UPI payment (no PayU link) — extend as needed for future treks
-  const useUpiPayment = selectedTrek.id === 'kuari-june';
+  const useUpiPayment = false;
 
   // Update selected trek when URL parameter changes
   useEffect(() => {

@@ -61,17 +61,6 @@ const AboutPage: React.FC = () => {
         youtube: 'https://www.youtube.com/@yatharthgairola',
         linkedin: 'https://www.linkedin.com/in/yatharthgairola'
       }
-    },
-    {
-      name: 'Ambuj Saxena',
-      role: 'Lead of Operations',
-      experience: '5+ years in digital marketing & operations',
-      image: ambujImage,
-      description: 'Entrepreneur, digital marketing expert, and YouTuber with 25K+ subscribers. Ensures smooth operations and exceptional customer experience for all our adventures.',
-      socialLinks: {
-        youtube: 'https://www.youtube.com/@ambuj_saxena_india/featured',
-        linkedin: 'https://in.linkedin.com/in/ambuj-saxena-india'
-      }
     }
   ];
 
@@ -356,7 +345,7 @@ const AboutPage: React.FC = () => {
         transition: 'background-color 0.3s ease'
       }}>
         <Title level={2} style={{ textAlign: 'center', marginBottom: '48px' }}>
-          Meet Our Team
+        🏕️ Meet Our Founder ⛰️
         </Title>
         <Row gutter={[24, 24]} justify="center">
           {teamMembers.map((member, index) => (

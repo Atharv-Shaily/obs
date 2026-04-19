@@ -14,6 +14,8 @@ import pranathiTestimonial from '../assets/testimonials/pranathi.jpg';
 import rohitTyagi from '../assets/testimonials/rohit_tyagi.png';
 import ghouse from '../assets/testimonials/ghouse.png';
 import teamThaith from '../assets/testimonials/team_thaith.png';
+import nagtibbaGroup from '../assets/treks/nagtibba/nag_group.png'
+import bhramtalGroup from '../assets/treks/bhramtal/bhrama_summit.png'
 
 const { Title, Paragraph } = Typography;
 
@@ -122,28 +124,41 @@ const DiariesPage: React.FC = () => {
   const experiences = [
     {
       id: 1,
-      title: 'Dayara Bugyal - Alpine Meadows Adventure',
-      date: 'June 2025',
-      location: 'Uttarkashi, Uttarakhand',
-      image: dayaraGroup,
-      description: 'Explored the stunning alpine meadows of Dayara Bugyal, one of India\'s most breathtaking high-altitude grasslands at 12,000 feet. Witnessed panoramic views of the Garhwal Himalayas.',
-      participants: 15,
-      duration: '5 days',
-      difficulty: 'Easy'
+      title: 'Nag Tibba - All Girls Trek',
+      date: 'April 2026',
+      location: 'Pantwari, Uttarakhand',
+      image: nagtibbaGroup,
+      description:
+        'An amazing women-only weekend in the Garhwal Himalayas—Nagtibba summit panoramas, beginner-friendly trails, and curated OBS moments. This was our first all-girls trip and it was a blast!',
+      participants: 18,
+      duration: '3 days',
+      difficulty: 'Easy',
     },
     {
       id: 2,
-      title: `Yulla Kanda - Trek to World's Highest Krishna Temple`,
-      date: 'August 2025',
-      location: 'Himachal Pradesh',
-      image: groupSummit,
-      description: 'Witnessed the mesmerizing views of the world\'s highest Shri Krishna temple, located at an altitude of about 3,895 meters',
-      participants: 6,
-      duration: '5 days',
-      difficulty: 'Easy to Moderate'
+      title: 'Brahmatal - The Hidden Paradise',
+      date: 'March 2026',
+      location: 'Lohajung, Uttarakhand',
+      image: bhramtalGroup,
+      description:
+        'Sun-kissed oak and rhododendron forests, majestic Brahmatal, golden sunsets, and sweeping Himalayan views—blended with Happiness Sharing, meditation and journaling, Alpine Olympics, Astro Nite under the stars, and a little OBS fun along the way.',
+      participants: 15,
+      duration: '4 days',
+      difficulty: 'Easy-Moderate',
     },
     {
       id: 3,
+      title: 'Kuari Pass - Winter Wonderland Trek',
+      date: 'December 2025',
+      location: 'Joshimath, Uttarakhand',
+      image: groupPreviousKuari,
+      description: 'Experienced the magic of winter in the Garhwal Himalayas with breathtaking views of snow-capped peaks including Nanda Devi, Trishul, and Dronagiri. An unforgettable journey through pristine snow-covered trails.',
+      participants: 20,
+      duration: '5 days',
+      difficulty: 'Moderate'
+    },
+    {
+      id: 4,
       title: 'Spiti Valley - Desert Mountain Adventure',
       date: 'September 2025',
       location: 'Himachal Pradesh',
@@ -154,15 +169,26 @@ const DiariesPage: React.FC = () => {
       difficulty: 'Easy to Moderate'
     },
     {
-      id: 4,
-      title: 'Kuari Pass - Winter Wonderland Trek',
-      date: 'December 2025',
-      location: 'Garhwal Himalayas, Uttarakhand',
-      image: groupPreviousKuari,
-      description: 'Experienced the magic of winter in the Garhwal Himalayas with breathtaking views of snow-capped peaks including Nanda Devi, Trishul, and Dronagiri. An unforgettable journey through pristine snow-covered trails.',
-      participants: 20,
+      id: 5,
+      title: `Yulla Kanda - Trek to World's Highest Krishna Temple`,
+      date: 'August 2025',
+      location: 'Kinnaur Valley, Himachal Pradesh',
+      image: groupSummit,
+      description: 'Witnessed the mesmerizing views of the world\'s highest Shri Krishna temple, located at an altitude of about 3,895 meters',
+      participants: 6,
       duration: '5 days',
-      difficulty: 'Moderate'
+      difficulty: 'Easy to Moderate'
+    },
+    {
+      id: 6,
+      title: 'Dayara Bugyal - Alpine Meadows Adventure',
+      date: 'June 2025',
+      location: 'Uttarkashi, Uttarakhand',
+      image: dayaraGroup,
+      description: 'Explored the stunning alpine meadows of Dayara Bugyal, one of India\'s most breathtaking high-altitude grasslands at 12,000 feet. Witnessed panoramic views of the Garhwal Himalayas.',
+      participants: 15,
+      duration: '5 days',
+      difficulty: 'Easy'
     }
   ];
 

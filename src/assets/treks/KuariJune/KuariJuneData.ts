@@ -18,6 +18,7 @@ export const kuariJuneData: TrekData = {
     kuariTaliLake,
     kuariScenery,
   ],
+  registrationLink: 'https://u.payu.in/PAYUMN/oI6bxKLQOiY7',
   brochure: kuariJuneBrochure,
   description:
     'Step into the legendary Kuari Pass trail — often called the Curzon Trail — where lush alpine meadows, ancient oak forests, and a panoramic 360° Himalayan skyline welcome every wanderer with open arms. This summer edition of the OBS Kuari Pass experience blends trekking adventure with curated activities focused on reflection, fun, and human connection.',
