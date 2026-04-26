@@ -6,6 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import BookingModal from '../components/BookingModal';
 import { kuariJuneData } from '../assets/treks/KuariJune/KuariJuneData';
+import { kuariMayData } from '../assets/treks/KuariMay/KuariMayData';
 import type { TrekData } from '../assets/treks/TrekData';
 import '../styles/components/HeroSection.less';
 import { getActiveOffer } from '../utils/specialOffer';
@@ -14,12 +15,14 @@ import '../styles/components/CarouselCustom.less';
 import '../styles/components/TrekTabs.less';
 import grasslandMountain from '../assets/treks/yulla/grassland-mountain.jpg';
 import kuariJuneHero from '../assets/treks/KuariJune/KuariJuneHero.png';
+import kuariMayHero from '../assets/treks/kuari/Kuari-Pass-Trek-Tali-Lake.webp';
 import upiImage from '../assets/upi.jpg';
 
 const { Title, Paragraph, Text } = Typography;
 
 const allTreks: TrekData[] = [
-  kuariJuneData,
+  kuariMayData,
+  kuariJuneData
 ];
 
 const UpcomingPage: React.FC = () => {
@@ -46,7 +49,7 @@ const UpcomingPage: React.FC = () => {
   const activeOffer = getActiveOffer(selectedTrek);
 
   // Treks that use UPI payment (no PayU link) — extend as needed for future treks
-  const useUpiPayment = false;
+  const useUpiPayment = !selectedTrek.registrationLink;
 
   // Update selected trek when URL parameter changes
   useEffect(() => {
@@ -127,6 +130,7 @@ const UpcomingPage: React.FC = () => {
 
   const getHeroImage = () => {
     if (selectedTrek.id === 'kuari-june') return kuariJuneHero;
+    if (selectedTrek.id === 'kuari-may') return kuariMayHero;
     return grasslandMountain;
   };
 

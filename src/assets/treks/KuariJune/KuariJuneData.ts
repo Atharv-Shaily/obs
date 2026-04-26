@@ -7,7 +7,7 @@ import type { TrekData } from '../TrekData';
 
 export const kuariJuneData: TrekData = {
   id: 'kuari-june',
-  title: 'Kuari Pass Trek - Oh-Bhaisahab Experience',
+  title: 'Kuari Pass Trek (June) - Oh-Bhaisahab Experience',
   date: 'June 5-10, 2026',
   duration: '6 Days / 5 Nights',
   difficulty: 'Moderate',
