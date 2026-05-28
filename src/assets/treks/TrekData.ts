@@ -49,6 +49,7 @@ export type TrekData = {
     refund: string;
   }>;
   videoUrl?: string;
+  videoCoverImage?: string;
   transportationRoute?: string;
   registrationLink?: string; // For direct registration (non-modal booking)
   /** Highlight as "All girls trip" */

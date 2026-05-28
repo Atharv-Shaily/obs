@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import BookingModal from '../components/BookingModal';
 import { kuariJuneData } from '../assets/treks/KuariJune/KuariJuneData';
-import { kuariMayData } from '../assets/treks/KuariMay/KuariMayData';
+import { YullaJulyData } from '../assets/treks/yullaKandaJuly/yullaKandaData';
 import type { TrekData } from '../assets/treks/TrekData';
 import '../styles/components/HeroSection.less';
 import { getActiveOffer } from '../utils/specialOffer';
@@ -15,13 +15,13 @@ import '../styles/components/CarouselCustom.less';
 import '../styles/components/TrekTabs.less';
 import grasslandMountain from '../assets/treks/yulla/grassland-mountain.jpg';
 import kuariJuneHero from '../assets/treks/KuariJune/KuariJuneHero.png';
-import kuariMayHero from '../assets/treks/kuari/Kuari-Pass-Trek-Tali-Lake.webp';
+import YullaJulyHero from '../assets/treks/yulla/group-casual.png';
 import upiImage from '../assets/upi.jpg';
 
 const { Title, Paragraph, Text } = Typography;
 
 const allTreks: TrekData[] = [
-  kuariMayData,
+  YullaJulyData,
   kuariJuneData
 ];
 
@@ -67,7 +67,17 @@ const UpcomingPage: React.FC = () => {
       }
     }
   }, [searchParams]);
-
+  useEffect(() => {
+    const isInstagram = selectedTrek.videoUrl?.includes('instagram.com');
+    if (!isInstagram) return;
+    const existing = document.getElementById('instagram-embed-script');
+    if (existing) existing.remove();
+    const script = document.createElement('script');
+    script.id = 'instagram-embed-script';
+    script.src = 'https://www.instagram.com/embed.js';
+    script.async = true;
+    document.body.appendChild(script);
+  }, [selectedTrek.videoUrl]);
   // WhatsApp Icon Component
   const WhatsAppIcon = () => (
     <svg
@@ -130,7 +140,7 @@ const UpcomingPage: React.FC = () => {
 
   const getHeroImage = () => {
     if (selectedTrek.id === 'kuari-june') return kuariJuneHero;
-    if (selectedTrek.id === 'kuari-may') return kuariMayHero;
+    if (selectedTrek.id === 'Yulla-July') return YullaJulyHero;
     return grasslandMountain;
   };
 
@@ -287,23 +297,28 @@ const UpcomingPage: React.FC = () => {
                   {selectedTrek.description}
                 </Paragraph>
 
-{(selectedTrek.pricing.totalCostWithTransport > 0 || selectedTrek.pricing.totalCostWithoutTransport > 0) && (
+{(selectedTrek.pricing.totalCostWithTransport > 0 || selectedTrek.pricing.totalCostWithoutTransport > 0) && (() => {
+  const samePrice = selectedTrek.pricing.totalCostWithTransport > 0 &&
+    selectedTrek.pricing.totalCostWithoutTransport > 0 &&
+    selectedTrek.pricing.totalCostWithTransport === selectedTrek.pricing.totalCostWithoutTransport;
+  const showTwoPrices = !samePrice &&
+    selectedTrek.pricing.totalCostWithTransport > 0 &&
+    selectedTrek.pricing.totalCostWithoutTransport > 0;
+  return (
                   <div className={`pricing-container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
                     <div className="pricing-header">
                       <WalletOutlined className="wallet-icon" />
                       <Text strong className="pricing-title">
-                        {selectedTrek.pricing.totalCostWithTransport > 0 && selectedTrek.pricing.totalCostWithoutTransport > 0 
-                          ? 'Pricing Options:' 
-                          : 'Pricing:'}
+                       {showTwoPrices ? 'Pricing Options:' : 'Pricing:'}
                       </Text>
                     </div>
                     <Row gutter={[16, 16]} className="pricing-cards">
                       {selectedTrek.pricing.totalCostWithTransport > 0 && (
-                        <Col xs={24} sm={selectedTrek.pricing.totalCostWithoutTransport > 0 ? 12 : 24}>
+                       <Col xs={24} sm={showTwoPrices ? 12 : 24}>
                           <div className={`pricing-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
                             {(selectedTrek.pricing.originalPrice != null || activeOffer != null) && (
                               <>
-                                <Text delete style={{ fontSize: '14px', color: isDarkMode ? '#737373' : '#666', marginRight: 8 }}>
+                                <Text delete style={{ fontSize: '24px', color: isDarkMode ? '#737373' : '#666', marginRight: 8 }}>
                                   ₹{(activeOffer?.originalPrice ?? selectedTrek.pricing.originalPrice)!.toLocaleString('en-IN')}
                                 </Text>
                                 <Text strong className="price-amount with-transport" style={{ color: '#059669' }}>
@@ -317,17 +332,17 @@ const UpcomingPage: React.FC = () => {
                             )}
                             {selectedTrek.pricing.originalPrice == null && activeOffer == null && (
                               <>
-                                <Text strong className="price-amount with-transport">₹{selectedTrek.pricing.totalCostWithTransport.toLocaleString('en-IN')}</Text>
+                                <Text strong className="price-amount with-transport"style={{fontSize: '22px'}}>₹{selectedTrek.pricing.totalCostWithTransport.toLocaleString('en-IN')}</Text>
                                 <br />
-                                <Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>With Transport</Text>
+                                {showTwoPrices && (<Text className={`price-description ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>With Transport</Text>)}
                               </>
                             )}
                           </div>
                         </Col>
                       )}
-                      {selectedTrek.pricing.totalCostWithoutTransport > 0 && (
-                        <Col xs={24} sm={selectedTrek.pricing.totalCostWithTransport > 0 ? 12 : 24}>
-                          <div className={`pricing-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+                      {showTwoPrices && selectedTrek.pricing.totalCostWithoutTransport > 0 && (
+  <Col xs={24} sm={12}>
+                                              <div className={`pricing-card ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
                             {selectedTrek.pricing.originalPrice != null && !selectedTrek.pricing.totalCostWithTransport && (
                               <>
                                 <Text delete style={{ fontSize: '14px', color: isDarkMode ? '#737373' : '#666', marginRight: 8 }}>
@@ -364,7 +379,7 @@ const UpcomingPage: React.FC = () => {
                       />
                     )}
                   </div>
-                )}
+  );})()}
 
                 {/* Transportation Note for treks without transport */}
                 {selectedTrek.pricing.totalCostWithTransport === 0 && selectedTrek.pricing.totalCostWithoutTransport > 0 && (
@@ -475,34 +490,132 @@ const UpcomingPage: React.FC = () => {
         {/* Highlights */}
         <Card title="OBS Experience Highlights" style={{ marginBottom: '40px', borderRadius: '12px' }}>
           <Row gutter={[32, 32]}>
-            {/* Video Section - Only show if videoUrl exists */}
-            {selectedTrek.videoUrl && (
-              <Col xs={24} lg={12}>
-                <div style={{ 
-                  position: 'relative',
-                  paddingTop: '56.25%', /* 16:9 Aspect Ratio */
-                  width: '100%',
-                  marginBottom: '16px'
-                }}>
-                  <iframe
-                    src={selectedTrek.videoUrl}
-                    title={`${selectedTrek.title} Highlights`}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
+             {/* Video Section - Only show if videoUrl exists */}
+            {selectedTrek.videoUrl && (() => {
+              const isInstagram = selectedTrek.videoUrl!.includes('instagram.com');
+              return (
+                <Col xs={24} lg={12}>
+                  {isInstagram ? (
+                    // Instagram Reel — show cover image (if provided) as clickable thumbnail
+                    <a
+                      href={selectedTrek.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ display: 'block', textDecoration: 'none' }}
+                    >
+                      <div style={{
+                        position: 'relative',
+                        width: '100%',
+                        paddingTop: '56.25%',
+                        borderRadius: '12px',
+                        overflow: 'hidden',
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+                        background: '#000',
+                        cursor: 'pointer',
+                      }}>
+                        {/* Cover image if provided, else gradient placeholder */}
+                        {selectedTrek.videoCoverImage ? (
+                          <img
+                            src={selectedTrek.videoCoverImage}
+                            alt="Reel cover"
+                            style={{
+                              position: 'absolute',
+                              top: 0, left: 0,
+                              width: '100%', height: '100%',
+                              objectFit: 'cover',
+                              opacity: 0.85,
+                            }}
+                          />
+                        ) : (
+                          <div style={{
+                            position: 'absolute',
+                            top: 0, left: 0,
+                            width: '100%', height: '100%',
+                            background: 'linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)',
+                          }} />
+                        )}
+ 
+                        {/* Play button overlay */}
+                        <div style={{
+                          position: 'absolute',
+                          top: 0, left: 0,
+                          width: '100%', height: '100%',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '10px',
+                        }}>
+                          <div style={{
+                            width: '64px', height: '64px',
+                            borderRadius: '50%',
+                            background: 'rgba(255,255,255,0.25)',
+                            backdropFilter: 'blur(4px)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            border: '2px solid rgba(255,255,255,0.6)',
+                          }}>
+                            <span style={{ fontSize: '28px', marginLeft: '4px' }}>▶</span>
+                          </div>
+                          <span style={{
+                            color: '#fff',
+                            fontWeight: 600,
+                            fontSize: '14px',
+                            background: 'rgba(0,0,0,0.4)',
+                            padding: '4px 12px',
+                            borderRadius: '20px',
+                            backdropFilter: 'blur(4px)',
+                          }}>
+                            Watch Reel on Instagram
+                          </span>
+                        </div>
+ 
+                        {/* Instagram logo top-right */}
+                        <div style={{
+                          position: 'absolute',
+                          top: '12px', right: '12px',
+                          background: 'linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)',
+                          borderRadius: '8px',
+                          padding: '4px 8px',
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          color: '#fff',
+                          letterSpacing: '0.5px',
+                        }}>
+                          REEL
+                        </div>
+                      </div>
+                    </a>
+                  ) : (
+                    // YouTube embed
+                    <div style={{
+                      position: 'relative',
+                      paddingTop: '56.25%',
                       width: '100%',
-                      height: '100%',
-                      borderRadius: '12px',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
-                    }}
-                  />
-                </div>
-              </Col>
-            )}
+                      marginBottom: '16px'
+                    }}>
+                      <iframe
+                        src={selectedTrek.videoUrl}
+                        title={`${selectedTrek.title} Highlights`}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: '12px',
+                          boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
+                        }}
+                      />
+                    </div>
+                  )}
+                </Col>
+              );
+            })()}
             
             {/* Highlights List */}
             <Col xs={24} lg={selectedTrek.videoUrl ? 12 : 24}>
@@ -519,6 +632,7 @@ const UpcomingPage: React.FC = () => {
             </Col>
           </Row>
         </Card>
+ 
 
         {/* Itinerary */}
         <Card title="Detailed Itinerary" style={{ marginBottom: '40px', borderRadius: '12px' }}>
@@ -667,7 +781,7 @@ const UpcomingPage: React.FC = () => {
                   </Title>
                   <Space direction="vertical" size="small" style={{ width: '100%' }}>
                     <Row justify="space-between">
-                      <Text>Registration Fee (Now):</Text>
+                      <Text>Registration Fee (Non-Refundable):</Text>
                       <Text strong style={{ color: '#ff4d4f' }}>
                         ₹{selectedTrek.pricing.registrationFee.toLocaleString('en-IN')}
                       </Text>

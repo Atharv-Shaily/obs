@@ -3,7 +3,7 @@ import groupSummit from '../assets/treks/yulla/group-summit.png';
 import groupMountain from '../assets/treks/spiti/group-mountain.png';
 import groupBackpack from '../assets/treks/yulla/group-backpack.png';
 import kuariJuneImg from '../assets/treks/kuari/kuari-ranges.png';
-import kuariMayImg from '../assets/treks/KuariJune/kuari-top.png'
+import YullaJulyImg from '../assets/treks/yulla/grassland-mountain.jpg'
 import trekGroup from '../assets/trek_group.png';
 import bhramtalGroup from '../assets/treks/bhramtal/bhrama_group.png';
 import nagTibbaGroup1 from '../assets/treks/nagtibba/nag_group.png'
@@ -12,20 +12,19 @@ import nagTibbaGroup2 from '../assets/treks/nagtibba/nag_group_2.png'
 
 export const featuredTreks = [
   {
-    id: 'kuari-may',
-    title: 'Kuari Pass Trek',
+    id: 'Yulla-July',
+    title: 'Yulla Kanda Trek',
     subtitle: 'Trekking Club x OBS Experience',
-    date: 'May 23-28, 2026',
-    duration: '6 Days / 5 Nights',
-    location: 'Garhwal Himalayas, Uttarakhand',
-    price: '₹12,999',
+    date: 'July 1-4, 2026',
+    duration: '4 Days / 3 Nights',
+    location: 'Yulla Khas , Himachal Pradesh',
+    price: '₹11,111',
     priceNote: 'with transport, incl. GST',
-    image: kuariMayImg,
+    image: YullaJulyImg,
     highlights: [
-      '360° Himalayan panorama at 12,500 ft',
-      'Views of Nanda Devi, Trishul & Chaukhamba',
-      'Alpine meadows on the legendary Curzon Trail',
-    ],
+ 'Stunning Himalayan landscapes, alpine meadows, and sacred high-altitude lake',
+    'Peaceful alpine meadows filled with wild mountain flora',
+    'Panoramic views of the snow-covered Himalayas',],
     color: '#0891b2',
   },
   {
