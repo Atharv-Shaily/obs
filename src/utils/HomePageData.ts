@@ -8,7 +8,7 @@ import trekGroup from '../assets/trek_group.png';
 import bhramtalGroup from '../assets/treks/bhramtal/bhrama_group.png';
 import nagTibbaGroup1 from '../assets/treks/nagtibba/nag_group.png'
 import nagTibbaGroup2 from '../assets/treks/nagtibba/nag_group_2.png'
-
+import VOFImage1 from "../assets/treks/ValleyofFlowersJuly/ValleyofFlowers-Image-2.png"
 
 export const featuredTreks = [
   {
@@ -53,6 +53,7 @@ export const featuredTreks = [
     location: 'Garhwal Hills, Uttarakhand',
     price: '₹13,750',
     priceNote: 'with transport, incl. GST',
+    image: VOFImage1,
     highlights: [
           'Trek through the Valley of Flowers, a UNESCO World Heritage Site',
     'Visit Hemkund Sahib, the world\'s highest Gurudwara at 14,100 ft',
