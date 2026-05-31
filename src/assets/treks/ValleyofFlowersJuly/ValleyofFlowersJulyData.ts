@@ -1,5 +1,8 @@
 import type { TrekData } from '../TrekData';
 import ValleyofFlowerBrochure from "./Valley of Flowers Trek Brochure (July Batch) (1)_compressed.pdf"
+import VOFImage1 from "./ValleyofFlowers-Image.png"
+import VOFImage2 from "./ValleyofFlowers-Image-2.png"
+import VOFImage3 from "./ValleyofFlowers-Image-3.png"
 export const valleyOfFlowersJulyData: TrekData = {
   id: 'ValleyofFlowers-July',
   title: 'Valley of Flowers Trek',
@@ -7,7 +10,9 @@ export const valleyOfFlowersJulyData: TrekData = {
   duration: '6 Days / 5 Nights',
   difficulty: 'Basic',
   location: 'Garhwal hills, Uttarakhand',
-  images: [],
+  images: [VOFImage1,
+    VOFImage2,
+  ],
   registrationLink: ' https://u.payu.in/PAYUMN/Srj7sGcrUsRm',
   brochure: ValleyofFlowerBrochure,
   description: 'OBS (Oh BhaiSahab Experience) is more than just a trek; it\'s a carefully curated journey that blends adventure, reflection, and human connection. We\'re heading to Valley of Flowers, a UNESCO World Heritage Site. We will also be visiting Hemkund Sahib, the world\'s highest Gurudwara, at 14,100 ft, and the sacred Badrinath Temple.',
