@@ -10,7 +10,7 @@ export const valleyOfFlowersJulyData: TrekData = {
   duration: '6 Days / 5 Nights',
   difficulty: 'Basic',
   location: 'Garhwal hills, Uttarakhand',
-  images: [VOFImage1, 
+  images: [VOFImage1,
     VOFImage2,
   ],
   registrationLink: ' https://u.payu.in/PAYUMN/Srj7sGcrUsRm',

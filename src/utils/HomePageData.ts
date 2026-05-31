@@ -53,7 +53,10 @@ export const featuredTreks = [
     location: 'Garhwal Hills, Uttarakhand',
     price: '₹13,750',
     priceNote: 'with transport, incl. GST',
+<<<<<<< HEAD
     image: VOFImage1,
+=======
+>>>>>>> main
     highlights: [
           'Trek through the Valley of Flowers, a UNESCO World Heritage Site',
     'Visit Hemkund Sahib, the world\'s highest Gurudwara at 14,100 ft',
