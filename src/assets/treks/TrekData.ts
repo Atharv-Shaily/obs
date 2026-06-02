@@ -8,12 +8,12 @@ export type PaymentLinks = {
 
 export type PricingDetails = {
   trekFee: number;
-  transportationFee: number | string;
-  totalCostWithTransport: number | string;
-  totalCostWithoutTransport: number | string;
+  transportationFee: number;
+  totalCostWithTransport: number;
+  totalCostWithoutTransport: number;
   registrationFee: number;
-  remainingAmountWithTransport: number | string;
-  remainingAmountWithoutTransport: number | string;
+  remainingAmountWithTransport: number;
+  remainingAmountWithoutTransport: number;
   paymentDeadline: string;
   /** Original price before discount (shown with strikethrough in pricing card and cost breakdown) */
   originalPrice?: number;
