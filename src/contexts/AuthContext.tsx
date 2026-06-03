@@ -26,12 +26,28 @@ interface AuthResponse {
   user: AuthUser;
 }
 
+interface RegisterResponse {
+  message: string;
+  requiresOtp?: boolean;
+  email?: string;
+}
+
+interface LoginResponse {
+  message: string;
+  token?: string;
+  user?: AuthUser;
+  requiresOtp?: boolean;
+  email?: string;
+}
+
 interface AuthContextType {
   user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (payload: LoginPayload) => Promise<void>;
-  register: (payload: RegisterPayload) => Promise<void>;
+  login: (payload: LoginPayload) => Promise<LoginResponse>;
+  register: (payload: RegisterPayload) => Promise<RegisterResponse>;
+  verifyOtp: (email: string, otp: string) => Promise<void>;
+  resendOtp: (email: string) => Promise<void>;
   googleLogin: (credential: string) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
@@ -74,16 +90,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     refreshUser();
   }, [refreshUser]);
 
-  const login = async (payload: LoginPayload): Promise<void> => {
-    const data = await api.post<AuthResponse>('/api/auth/login', payload);
+  const login = async (payload: LoginPayload): Promise<LoginResponse> => {
+    try {
+      const data = await api.post<LoginResponse>('/api/auth/login', payload);
+      if (data.token && data.user) {
+        localStorage.setItem(TOKEN_KEY, data.token);
+        setUser(data.user);
+      }
+      return data;
+    } catch (err: any) {
+      // Axios error handling to capture the 403 unverified state
+      if (err.response?.status === 403 && err.response?.data?.requiresOtp) {
+        return err.response.data;
+      }
+      throw err;
+    }
+  };
+
+  const register = async (payload: RegisterPayload): Promise<RegisterResponse> => {
+    const data = await api.post<RegisterResponse>('/api/auth/register', payload);
+    // Do NOT set token here, user is unverified.
+    return data;
+  };
+
+  const verifyOtp = async (email: string, otp: string): Promise<void> => {
+    const data = await api.post<AuthResponse>('/api/auth/verify-otp', { email, otp });
     localStorage.setItem(TOKEN_KEY, data.token);
     setUser(data.user);
   };
 
-  const register = async (payload: RegisterPayload): Promise<void> => {
-    const data = await api.post<AuthResponse>('/api/auth/register', payload);
-    localStorage.setItem(TOKEN_KEY, data.token);
-    setUser(data.user);
+  const resendOtp = async (email: string): Promise<void> => {
+    await api.post('/api/auth/resend-otp', { email });
   };
 
   const googleLogin = async (credential: string): Promise<void> => {
@@ -105,6 +142,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         isLoading,
         login,
         register,
+        verifyOtp,
+        resendOtp,
         googleLogin,
         logout,
         refreshUser,
