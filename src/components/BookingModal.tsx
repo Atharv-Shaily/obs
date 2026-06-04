@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Radio, Space, Typography, Button, Divider, Card, Row, Col, Alert } from 'antd';
 import { CheckCircleOutlined, WalletOutlined, CreditCardOutlined } from '@ant-design/icons';
 import { useDarkMode } from '../contexts/DarkModeContext';
-import type { PricingDetails, PaymentLinks } from '../assets/treks/TrekData';
+import type { PricingDetails } from '../assets/treks/TrekData';
+import { api } from '../api/axios';
 import '../styles/components/BookingModal.less';
 
 const { Title, Text, Paragraph } = Typography;
@@ -12,7 +13,6 @@ interface BookingModalProps {
   onClose: () => void;
   trekTitle: string;
   pricing: PricingDetails;
-  paymentLinks: PaymentLinks;
   transportationRoute?: string;
 }
 
@@ -21,7 +21,6 @@ const BookingModal: React.FC<BookingModalProps> = ({
   onClose, 
   trekTitle, 
   pricing, 
-  paymentLinks,
   transportationRoute = 'Transportation included'
 }) => {
   const { isDarkMode } = useDarkMode();
@@ -29,21 +28,19 @@ const BookingModal: React.FC<BookingModalProps> = ({
   const [withTransportation, setWithTransportation] = useState<boolean>(true);
   const [paymentType, setPaymentType] = useState<'full' | 'registration'>('registration');
   const [calculatedAmount, setCalculatedAmount] = useState<number>(0);
-  const [paymentLink, setPaymentLink] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Calculate amount and payment link based on selections
+  // Calculate amount based on selections
   useEffect(() => {
     let amount = 0;
-    let link = '';
 
     if (alreadyPaidRegistration) {
       // User has already paid registration, show remaining dues
       if (withTransportation) {
         amount = pricing.remainingAmountWithTransport;
-        link = paymentLinks.remainingDuesWithTransport;
       } else {
         amount = pricing.remainingAmountWithoutTransport;
-        link = paymentLinks.remainingDuesWithoutTransport;
       }
     } else {
       // User hasn't paid registration yet
@@ -51,26 +48,73 @@ const BookingModal: React.FC<BookingModalProps> = ({
         // Full payment
         if (withTransportation) {
           amount = pricing.totalCostWithTransport;
-          link = paymentLinks.fullPaymentWithTransport;
         } else {
           amount = pricing.totalCostWithoutTransport;
-          link = paymentLinks.fullPaymentWithoutTransport;
         }
       } else {
         // Registration only
         amount = pricing.registrationFee;
-        link = paymentLinks.registrationOnly;
       }
     }
 
     setCalculatedAmount(amount);
-    setPaymentLink(link);
-  }, [alreadyPaidRegistration, withTransportation, paymentType, pricing, paymentLinks]);
+  }, [alreadyPaidRegistration, withTransportation, paymentType, pricing]);
 
-  const handleBookNow = () => {
-    if (paymentLink) {
-      window.open(paymentLink, '_blank');
+  const handleBookNow = async () => {
+    setLoading(true);
+    setErrorMsg(null);
+    try {
+      // Call backend to initiate payment and get PayU credentials + signature hash
+      const data = await api.post<{
+        key: string;
+        txnid: string;
+        amount: string;
+        productinfo: string;
+        firstname: string;
+        email: string;
+        hash: string;
+        surl: string;
+        furl: string;
+        actionUrl: string;
+      }>('/api/payments/initiate', {
+        trekTitle,
+        amount: calculatedAmount,
+      });
+
+      // Dynamically submit the form to PayU
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = data.actionUrl;
+
+      const fields = {
+        key: data.key,
+        txnid: data.txnid,
+        amount: data.amount,
+        productinfo: data.productinfo,
+        firstname: data.firstname,
+        email: data.email,
+        hash: data.hash,
+        surl: data.surl,
+        furl: data.furl,
+      };
+
+      Object.entries(fields).forEach(([name, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+      
       onClose();
+    } catch (err: any) {
+      console.error('Payment initiation failed:', err);
+      setErrorMsg(err?.message || 'Failed to initiate payment. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,6 +122,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
     setAlreadyPaidRegistration(false);
     setWithTransportation(true);
     setPaymentType('registration');
+    setErrorMsg(null);
   };
 
   return (
@@ -318,6 +363,16 @@ const BookingModal: React.FC<BookingModalProps> = ({
           </Row>
         </Card>
 
+        {errorMsg && (
+          <Alert
+            message="Payment Error"
+            description={errorMsg}
+            type="error"
+            showIcon
+            style={{ marginBottom: '16px' }}
+          />
+        )}
+
         {/* Action Buttons */}
         <Row gutter={[12, 12]}>
           <Col xs={24} sm={12}>
@@ -325,6 +380,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
               size="large"
               block
               onClick={onClose}
+              disabled={loading}
               style={{ height: '50px', fontSize: '16px' }}
             >
               Cancel
@@ -336,6 +392,7 @@ const BookingModal: React.FC<BookingModalProps> = ({
               size="large"
               block
               onClick={handleBookNow}
+              loading={loading}
               style={{ 
                 height: '50px', 
                 fontSize: '16px',

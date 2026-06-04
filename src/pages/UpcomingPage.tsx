@@ -107,14 +107,7 @@ const UpcomingPage: React.FC = () => {
       setUpiModalOpen(true);
       return;
     }
-    if (selectedTrek.registrationLink) {
-      window.open(selectedTrek.registrationLink, '_blank');
-    } else {
-      paymentMessageRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }
+    setBookingModalOpen(true);
   };
 
   const handleDownloadBrochure = () => {
@@ -909,8 +902,8 @@ const UpcomingPage: React.FC = () => {
                           }
                           if (useUpiPayment) {
                             setUpiModalOpen(true);
-                          } else if (selectedTrek.registrationLink) {
-                            window.open(selectedTrek.registrationLink, '_blank');
+                          } else {
+                            setBookingModalOpen(true);
                           }
                         }}
                         className="booking-button"
@@ -993,7 +986,6 @@ const UpcomingPage: React.FC = () => {
         onClose={() => setBookingModalOpen(false)}
         trekTitle={selectedTrek.title}
         pricing={selectedTrek.pricing}
-        paymentLinks={selectedTrek.paymentLinks}
         transportationRoute={selectedTrek.transportationRoute || 'To be announced'}
       />
     </div>
