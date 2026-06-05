@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Booking from '../models/Booking';
 
 const connectDB = async (): Promise<void> => {
   const mongoURI = process.env.MONGO_URI;
@@ -10,6 +11,15 @@ const connectDB = async (): Promise<void> => {
   try {
     const conn = await mongoose.connect(mongoURI);
     console.log(`MongoDB connected: ${conn.connection.host}`);
+
+    // Sync schema indexes to the database.
+    // Wrapped in its own try/catch so a sync failure never crashes the server.
+    try {
+      await Booking.syncIndexes();
+      console.log('Booking indexes synced.');
+    } catch (indexErr) {
+      console.warn('Warning: Booking index sync failed (server will still run):', indexErr);
+    }
   } catch (error) {
     console.error('MongoDB connection error:', error);
     process.exit(1);

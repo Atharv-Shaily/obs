@@ -25,7 +25,12 @@ export const createBooking = async (req: Request, res: Response): Promise<void> 
     });
 
     res.status(201).json({ message: 'Booking created.', booking });
-  } catch (error) {
+  } catch (error: any) {
+    // MongoDB duplicate key error (index violation)
+    if (error?.code === 11000) {
+      res.status(409).json({ message: 'You already have an active booking for this trek.' });
+      return;
+    }
     res.status(500).json({ message: 'Server error creating booking.', error });
   }
 };
@@ -40,8 +45,8 @@ export const updateBookingStatus = async (req: Request, res: Response): Promise<
     const { id } = req.params;
     const { status } = req.body as { status: 'Pending' | 'Completed' };
 
-    if (!['Pending', 'Completed'].includes(status)) {
-      res.status(400).json({ message: "Status must be 'Pending' or 'Completed'." });
+    if (!['Pending', 'Completed', 'Cancelled'].includes(status)) {
+      res.status(400).json({ message: "Status must be 'Pending', 'Completed', or 'Cancelled'." });
       return;
     }
 
@@ -55,7 +60,7 @@ export const updateBookingStatus = async (req: Request, res: Response): Promise<
     booking.status = status;
     await booking.save();
 
-    // Award loyalty points only on first completion
+    // Award loyalty points only on first completion (not when cancelling)
     if (status === 'Completed' && !wasAlreadyCompleted) {
       await processCompletedTrek(booking.userId, booking.trekId);
     }

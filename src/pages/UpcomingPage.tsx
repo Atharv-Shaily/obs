@@ -5,6 +5,7 @@ import { CalendarOutlined, EnvironmentOutlined, ClockCircleOutlined, WalletOutli
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import { useAuth } from '../contexts/AuthContext';
+import { api } from '../api/axios';
 import BookingModal from '../components/BookingModal';
 import { kuariJuneData } from '../assets/treks/KuariJune/KuariJuneData';
 import { YullaJulyData } from '../assets/treks/yullaKandaJuly/yullaKandaData';
@@ -39,6 +40,15 @@ const UpcomingPage: React.FC = () => {
   const trekContentRef = useRef<HTMLDivElement>(null);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [upiModalOpen, setUpiModalOpen] = useState(false);
+  const [myBookings, setMyBookings] = useState<{ trekId: { title: string }; status: string }[]>([]);
+
+  // Fetch the user's existing bookings so we can block duplicate booking attempts
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    api.get<{ bookings: { trekId: { title: string }; status: string }[] }>('/api/bookings/my')
+      .then((data) => setMyBookings(data.bookings))
+      .catch(() => { /* silently ignore — duplicate check is enforced on the backend too */ });
+  }, [isAuthenticated]);
 
   // Initialize selected trek from URL parameter or default to first trek
   const getInitialTrek = (): TrekData => {
@@ -103,6 +113,33 @@ const UpcomingPage: React.FC = () => {
       navigate('/auth', { state: { returnTo: `${location.pathname}${location.search}` } });
       return;
     }
+
+    // Check if user already has an active (Pending or Completed) booking for this trek.
+    // We search in both directions since the DB title may differ slightly from the frontend title.
+    const searchKey = selectedTrek.title.split(' - ')[0].toLowerCase();
+    const alreadyBooked = myBookings.some(
+      (b) => {
+        if (!b.trekId?.title || !b.status) return false;
+        const dbTitle = b.trekId.title.toLowerCase();
+        return (
+          (dbTitle.includes(searchKey) || searchKey.includes(dbTitle.split(' - ')[0])) &&
+          (b.status === 'Pending' || b.status === 'Completed')
+        );
+      }
+    );
+
+    if (alreadyBooked) {
+      Modal.warning({
+        title: 'Already Booked',
+        content: `You already have an active booking for ${selectedTrek.title}. Check your profile for booking details.`,
+        okText: 'View Profile',
+        cancelText: 'Close',
+        okCancel: true,
+        onOk: () => navigate('/profile'),
+      });
+      return;
+    }
+
     if (useUpiPayment) {
       setUpiModalOpen(true);
       return;
@@ -895,17 +932,7 @@ const UpcomingPage: React.FC = () => {
                       <Button 
                         type="primary" 
                         size="large"
-                        onClick={() => {
-                          if (!isAuthenticated) {
-                            navigate('/auth', { state: { returnTo: `${location.pathname}${location.search}` } });
-                            return;
-                          }
-                          if (useUpiPayment) {
-                            setUpiModalOpen(true);
-                          } else {
-                            setBookingModalOpen(true);
-                          }
-                        }}
+                        onClick={handleBookNow}
                         className="booking-button"
                       >
                         🎯 Book Your Slot Now

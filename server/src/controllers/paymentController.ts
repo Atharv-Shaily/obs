@@ -35,15 +35,36 @@ export const initiatePayment = async (req: Request, res: Response): Promise<void
       });
     }
 
-    // 2. Find or create a pending booking for this user and trek
-    let booking = await Booking.findOne({ userId, trekId: trek._id, status: 'Pending' });
-    if (!booking) {
-      booking = await Booking.create({
-        userId,
-        trekId: trek._id,
-        status: 'Pending',
-      });
+    // 2. Block re-booking a Completed trek; reuse a Pending booking; allow fresh booking after Cancellation.
+    let booking = await Booking.findOne({
+      userId,
+      trekId: trek._id,
+      status: { $in: ['Pending', 'Completed'] }, // only look at active bookings
+    });
+
+    if (booking?.status === 'Completed') {
+      res.status(409).json({ message: 'You have already completed this trek and cannot book it again.' });
+      return;
     }
+
+    if (!booking) {
+      // No active booking — either first time or re-booking after cancellation
+      try {
+        booking = await Booking.create({
+          userId,
+          trekId: trek._id,
+          status: 'Pending',
+        });
+      } catch (createError: any) {
+        // Guard against race conditions where two requests slip through simultaneously
+        if (createError?.code === 11000) {
+          res.status(409).json({ message: 'You already have an active booking for this trek.' });
+          return;
+        }
+        throw createError;
+      }
+    }
+    // else: reuse the existing Pending booking
 
     // 3. Prepare parameters for PayU
     const key = process.env.PAYU_MERCHANT_KEY || 'default_key';
