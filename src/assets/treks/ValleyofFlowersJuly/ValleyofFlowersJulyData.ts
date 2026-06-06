@@ -1,5 +1,5 @@
 import type { TrekData } from '../TrekData';
-import ValleyofFlowerBrochure from "./Valley of Flowers Trek Brochure (July Batch) (1)_compressed.pdf"
+import ValleyofFlowerBrochure from "./Valley Of Flowers Brochure.pdf"
 import VOFImage1 from "./ValleyofFlowers-Image.png"
 import VOFImage2 from "./ValleyofFlowers-Image-2.png"
 export const valleyOfFlowersJulyData: TrekData = {
@@ -65,9 +65,9 @@ export const valleyOfFlowersJulyData: TrekData = {
   inclusions: [
     'Stay for 5 Nights',
     'Entry/Permit Fees',
-    'All Meals from Day 1 Dinner to Day 5 Breakfast (2+12 Meals). 12 meals arranged through Langar, 2 packed or hotel meals',
+    'Day 1 dinner to Day 6 breakfast included.',
     'Transportation | Dehradun to Pulna Village to Dehradun',
-    'Signature OBS (Oh-Bhaisahab) Experiences',
+    'Signature OBS (Oh BhaiSahab) Experiences',
     'Welcome & Farewell Gifts, Gifts for Winners',
     'Memories for a lifetime ;)',
   ],
